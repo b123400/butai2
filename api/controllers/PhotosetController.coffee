@@ -39,24 +39,42 @@ module.exports = {
     res.view 'photoset/add'
 
   create : (req, serverResponse)->
-    request = http.get 'http://s3-ap-northeast-1.amazonaws.com/butai/112/photos_original.JPG', (res)->
+
+    if not req.param 'socket'
+      return serverResponse.view 'photoset/create'
+
+    if not req.param 'imageURL'
+      return serverResponse.json success : false
+    
+    serverResponse.json
+      success: true
+      message: 'hello'
+
+    imageRequest = http.get req.param('imageURL'), (res)->
+      uploadToS3 res
+    imageRequest.on 'error', (err)->
+      handleError 'cannot fetch'+err
+
+    uploadToS3 = (res)->
       headers =
         'Content-Length': res.headers['content-length']
         'Content-Type': res.headers['content-type']
 
-      client.putStream res, '/doodle.png', headers, (err, res)->
-        if err
-          console.log err
-          serverResponse.send 'upload error'+err
-          return
+      client.putStream(res, '/doodle.png', headers, handleUploadResult)
+      .on 'progress', (result)->
+        req.socket.emit 'progress', result.percent
 
-        Photoset.create
-          reality : req.param 'reality'
-          capture : req.param 'capture'
-          address : req.param 'address'
-        .done (err, photoset)->
-          serverResponse.redirect 'photoset/find/'+photoset.id
+    handleUploadResult = (err, res)->
+      return handleError 'upload error'+err if err
 
-    request.on 'error', (err)->
-      serverResponse.send 'not a url'
+      Photoset.create
+        reality : req.param 'reality'
+        capture : req.param 'capture'
+        address : req.param 'address'
+      .done (err, photoset)->
+        req.socket.emit 'done', photoset.id
+
+    handleError = (err)->
+      console.log err
+      # serverResponse.send err
 }

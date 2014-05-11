@@ -1,0 +1,16 @@
+<script>
+var fetchImage = function(url){
+	socket.get('/photoset/create', {socket:true, imageURL : url}, function(result){
+		if( result.success ){
+			socket.on('progress',function(progress){
+				document.getElementById('progress').innerHTML = progress;
+			});
+			socket.on('done',function(id){
+				location.href = '/photoset/find/'+id;
+			});
+		}
+	});
+}
+</script>
+<div id="progress">
+</div>
