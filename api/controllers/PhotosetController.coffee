@@ -15,6 +15,12 @@
  * @docs        :: http://sailsjs.org/#!documentation/controllers
 ###
 
+http = require 'http'
+knox = require 'knox'
+sails = require 'sails'
+
+client = knox.createClient sails.config.aws
+
 module.exports = {
     
   
@@ -32,11 +38,25 @@ module.exports = {
   add : (req, res)->
     res.view 'photoset/add'
 
-  create : (req, res)->
-    Photoset.create
-      reality : req.param 'reality'
-      capture : req.param 'capture'
-      address : req.param 'address'
-    .done (err, photoset)->
-      res.redirect 'photoset/find/'+photoset.id
+  create : (req, serverResponse)->
+    request = http.get 'http://s3-ap-northeast-1.amazonaws.com/butai/112/photos_original.JPG', (res)->
+      headers =
+        'Content-Length': res.headers['content-length']
+        'Content-Type': res.headers['content-type']
+
+      client.putStream res, '/doodle.png', headers, (err, res)->
+        if err
+          console.log err
+          serverResponse.send 'upload error'+err
+          return
+
+        Photoset.create
+          reality : req.param 'reality'
+          capture : req.param 'capture'
+          address : req.param 'address'
+        .done (err, photoset)->
+          serverResponse.redirect 'photoset/find/'+photoset.id
+
+    request.on 'error', (err)->
+      serverResponse.send 'not a url'
 }
