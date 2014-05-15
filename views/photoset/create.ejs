@@ -1,16 +1,20 @@
-<script>
-var fetchImage = function(url){
-	socket.get('/photoset/create', {socket:true, imageURL : url}, function(result){
-		if( result.success ){
-			socket.on('progress',function(progress){
-				document.getElementById('progress').innerHTML = progress;
-			});
-			socket.on('done',function(id){
-				location.href = '/photoset/find/'+id;
-			});
-		}
-	});
-}
-</script>
-<div id="progress">
+<div id="reality-progress">
 </div>
+<div id="capture-progress">
+</div>
+
+<form id="create-photoset">
+    <p class="label">二次元</p>
+    <div class="progressbar">
+        <input type="text" class="capture" placeholder="行きたいなー"/>
+        <div class="progressbar-background"></div>
+    </div>
+    <p class="label">現実</p>
+    <div class="progressbar">
+        <input type="text" class="reality" placeholder="見ろよ"/>
+        <div class="progressbar-background"></div>
+    </div>
+    <p class="label">引用元</p>
+    <input type="text" class="address" placeholder="例) http://example.com"/>
+    <input type="submit" value="投稿"/>
+</form>

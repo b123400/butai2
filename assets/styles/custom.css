@@ -1,0 +1,310 @@
+nav, .nav-background {
+  position: fixed;
+  left: 0;
+  top: 0;
+  width: 20%;
+  min-width: 125px;
+  height: 100%;
+  line-height: 120%;
+  text-align: right;
+  overflow: hidden;
+  z-index: 10; }
+  @media screen and (max-width: 480px) {
+    nav, .nav-background {
+      position: relative;
+      max-height: 125px; } }
+  nav a, nav p, .nav-background a, .nav-background p {
+    font-size: 12px;
+    color: black;
+    display: block;
+    text-decoration: none; }
+    nav a:hover, nav p:hover, .nav-background a:hover, .nav-background p:hover {
+      text-decoration: underline; }
+  nav a.logo, .nav-background a.logo {
+    font-family: "DIN condensed", sans-serif;
+    margin-top: 40px;
+    margin-bottom: 40px;
+    font-size: 24px;
+    line-height: 24px; }
+  nav .bottom, .nav-background .bottom {
+    position: absolute;
+    bottom: 0;
+    width: 100%;
+    background-color: white; }
+  nav .background, .nav-background .background {
+    height: 100%;
+    width: 100%;
+    display: block;
+    position: absolute;
+    top: 0;
+    left: 0;
+    background-color: red; }
+  nav .avatar, .nav-background .avatar {
+    height: 50px;
+    height: 50px;
+    border-radius: 100px; }
+  nav .map-photosets .map-photoset, .nav-background .map-photosets .map-photoset {
+    position: relative;
+    width: 50px;
+    height: 50px;
+    float: right;
+    margin: 3% 0 3% 6%;
+    background-size: 100%;
+    background-size: cover;
+    background-position: 50% 50%;
+    background-repeat: no-repeat; }
+    nav .map-photosets .map-photoset.selected, .nav-background .map-photosets .map-photoset.selected {
+      outline: solid 3px red; }
+    nav .map-photosets .map-photoset .caption, .nav-background .map-photosets .map-photoset .caption {
+      position: absolute;
+      margin: 0;
+      bottom: 0;
+      max-width: 100%;
+      color: white; }
+
+.primary {
+  position: relative;
+  left: 0;
+  margin-left: 21%;
+  max-width: 1000px;
+  padding-top: 40px; }
+  @media screen and (max-width: 625px) {
+    .primary {
+      margin-left: 131.25px; } }
+  @media screen and (max-width: 480px) {
+    .primary {
+      margin-left: 0; } }
+  .primary.extend-right {
+    max-width: none; }
+  .primary.full-width {
+    max-width: none;
+    margin-left: 0; }
+  .primary .entry {
+    margin-bottom: 40px;
+    width: 100%; }
+    .primary .entry .images img {
+      float: left;
+      width: 49.75%; }
+      @media screen and (max-width: 480px) {
+        .primary .entry .images img {
+          width: 100%; } }
+      .primary .entry .images img:nth-child(2) {
+        margin-left: 0.5%; }
+        @media screen and (max-width: 480px) {
+          .primary .entry .images img:nth-child(2) {
+            margin-left: 0; } }
+    .primary .entry .speach-triangle {
+      display: block;
+      height: 10px;
+      margin-top: -10px; }
+      .primary .entry .speach-triangle:before {
+        content: ".";
+        height: 0px;
+        border-style: solid;
+        border-width: 0px 10px 10px 0px;
+        border-color: transparent transparent white transparent;
+        font-size: 0;
+        width: 30px;
+        display: block;
+        position: absolute; }
+      .primary .entry .speach-triangle:after {
+        content: ".";
+        height: 0px;
+        border-style: solid;
+        border-width: 0px 0px 10px 10px;
+        border-color: transparent transparent white transparent;
+        font-size: 0;
+        left: 40px;
+        position: absolute;
+        display: block;
+        right: 0px; }
+    .primary .entry .avatar {
+      margin-top: 5px;
+      width: 40px;
+      height: 40px;
+      border-radius: 20px;
+      margin-left: 20px; }
+    .primary .entry span.title {
+      margin-top: 18.5px;
+      font-size: 15px;
+      display: inline-block; }
+    .primary .entry a.right-item {
+      margin-top: 14px;
+      padding: 5px;
+      text-decoration: none;
+      float: right;
+      font-size: 12px;
+      color: #999999; }
+    .primary .entry a.comment-count {
+      background-color: #f9f9f9;
+      padding: 5px 10px;
+      border-radius: 5px; }
+      .primary .entry a.comment-count:hover {
+        background-color: #eeeeee; }
+  .primary .artworks div.artwork {
+    width: 33%;
+    min-width: 250px;
+    height: 300px;
+    display: inline-block;
+    float: left;
+    position: relative; }
+    @media screen and (max-width: 950px) {
+      .primary .artworks div.artwork {
+        width: 50%; } }
+    @media screen and (max-width: 633px) {
+      .primary .artworks div.artwork {
+        width: 100%; } }
+    .primary .artworks div.artwork .capture, .primary .artworks div.artwork .photo {
+      position: absolute;
+      background-size: 100%;
+      background-size: cover;
+      background-position: 50% 50%;
+      background-repeat: no-repeat;
+      left: 0;
+      top: 0;
+      height: 100%;
+      width: 100%;
+      overflow: hidden; }
+    .primary .artworks div.artwork .capture {
+      z-index: 20; }
+    .primary .artworks div.artwork .photo {
+      z-index: 10; }
+    .primary .artworks div.artwork .caption {
+      position: absolute;
+      bottom: 0;
+      z-index: 30;
+      margin: 0 0;
+      width: 100%;
+      padding: 10px 0;
+      transition: all 0.5s; }
+      .primary .artworks div.artwork .caption .artwork {
+        font-size: 30px;
+        margin-left: 10px; }
+      .primary .artworks div.artwork .caption .location {
+        font-size: 12px; }
+      .primary .artworks div.artwork .caption.background--light {
+        color: black; }
+      .primary .artworks div.artwork .caption.background--complex {
+        background-color: rgba(255, 255, 255, 0.4); }
+      .primary .artworks div.artwork .caption.background--dark {
+        color: white; }
+        .primary .artworks div.artwork .caption.background--dark.background--complex {
+          background-color: rgba(0, 0, 0, 0.4); }
+  .primary .photoset {
+    width: 100%;
+    height: 300px; }
+    .primary .photoset .photo {
+      width: 50%;
+      height: 100%;
+      background-color: #fbae00;
+      float: left; }
+    .primary .photoset .capture {
+      width: 50%;
+      height: 100%;
+      background-color: #d409b7;
+      float: left; }
+  .primary .photoset-map {
+    width: 100%;
+    height: 200px;
+    margin-top: 50px; }
+    .primary .photoset-map .map-canvas {
+      width: 100%;
+      height: 100%; }
+  .primary .comment {
+    width: 100%;
+    max-width: 300px;
+    margin: 10px auto; }
+    .primary .comment .avatar {
+      width: 40px;
+      height: 40px;
+      border-radius: 20px;
+      float: left; }
+    .primary .comment .body {
+      margin-left: 50px;
+      background: #eeeeee;
+      border-radius: 5px;
+      padding: 5px;
+      font-size: 12px;
+      min-height: 30px; }
+    .primary .comment .body:before {
+      content: "";
+      height: 0px;
+      border-style: solid;
+      border-width: 7px 7px 7px 0;
+      border-color: transparent #eeeeee transparent transparent;
+      width: 0;
+      display: block;
+      left: 0;
+      float: left;
+      margin-left: -12px;
+      margin-top: 8px; }
+  .primary .suggestion {
+    margin-top: 50px;
+    width: 50%;
+    height: 150px;
+    float: left;
+    overflow: hidden; }
+    .primary .suggestion img {
+      width: 100%;
+      -webkit-filter: brightness(30%) blur(2px); }
+    .primary .suggestion .caption {
+      z-index: 1;
+      position: absolute;
+      color: white;
+      font-size: 12px;
+      bottom: 0;
+      margin: 0 0 10px 10px; }
+  .primary.map {
+    position: absolute;
+    width: 79%;
+    height: 100%;
+    max-width: none;
+    padding-top: 0; }
+    .primary.map .map-canvas {
+      position: relative;
+      width: 100%;
+      height: 100%; }
+  .primary form {
+    width: 100%;
+    max-width: 400px;
+    margin: 0 auto;
+    text-align: center;
+    margin-top: 100px; }
+    .primary form p.label {
+      font-size: 1.5em;
+      margin: 0;
+      text-align: left; }
+    .primary form input[type=text], .primary form input[type=password] {
+      width: 100%;
+      border-width: 0 0 1px 0;
+      border-color: #7a7a7a;
+      font-size: 2em;
+      margin-bottom: 30px;
+      border-style: dotted;
+      outline: none; }
+    .primary form input[type=submit] {
+      background: #47dbc3;
+      border: 0;
+      color: white;
+      padding: 10px 40px;
+      border-radius: 5px; }
+      .primary form input[type=submit]:hover {
+        background: #3cbba6; }
+      .primary form input[type=submit][disabled] {
+        background: #999999; }
+    .primary form .progressbar {
+      position: relative; }
+      .primary form .progressbar input {
+        z-index: 3;
+        position: relative;
+        background: transparent; }
+      .primary form .progressbar .progressbar-background {
+        width: 0%;
+        position: absolute;
+        background: #9efaeb;
+        top: 0;
+        bottom: 30px;
+        z-index: 2; }
+
+.clearfix {
+  clear: both; }

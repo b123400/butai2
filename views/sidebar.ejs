@@ -1,0 +1,15 @@
+<nav>
+    <a href="" class="logo">Butai</a>
+
+    <% if(typeof sidebarPartial !== "undefined" && typeof sidebarContent !== "undefined"){ %>
+        <%- partial(sidebarPartial,sidebarContent) %>
+    <% } else if(typeof sidebarPartial !== "undefined"){ %>
+        <%- partial(sidebarPartial) %>
+    <% } %>
+
+    <div class="bottom">
+        <a href="">投稿</a>
+        <a href="">地図</a>
+        <a href="">ログイン</a>
+    </div>
+</nav>

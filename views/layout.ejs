@@ -1,16 +1,27 @@
 <!DOCTYPE html>
-<html>
-  <head>
+<!--[if lt IE 7]>      <html class="no-js lt-ie9 lt-ie8 lt-ie7"> <![endif]-->
+<!--[if IE 7]>         <html class="no-js lt-ie9 lt-ie8"> <![endif]-->
+<!--[if IE 8]>         <html class="no-js lt-ie9"> <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js"> <!--<![endif]-->
+    <head>
+        <meta charset="utf-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <meta name="description" content="">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+
+        <!-- Place favicon.ico and apple-touch-icon.png in the root directory -->
+
+        <link rel="stylesheet" href="/styles/normalize.css">
+        <link rel="stylesheet" href="/styles/main.css">
+        <link rel="stylesheet" href="/styles/custom.css">
+        <script src="/js/vendor/modernizr-2.6.2.min.js"></script>
+        <link href='http://fonts.googleapis.com/css?family=Abel|Ropa+Sans|Wire+One' rel='stylesheet' type='text/css'>
     <!--
         For demonstration purposes, the `title` is dynamically set here based on
         your `sails.config.appName` to show that you can inject data into layouts
         exactly the same way as with your other view templates.
     -->
     <title><%- title %></title>
-
-    <!-- Viewport mobile tag for sensible mobile support -->
-    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1" />
-
     <!--
 
       Stylesheets
@@ -36,9 +47,18 @@
   </head>
 
   <body>
+    <% if( typeof sidebarPartial === "undefined" ){ %>
+      <%- partial('sidebar') %>
+    <% } else { %>
+      <%- partial('sidebar',{
+        sidebarPartial : sidebarPartial
+      }) %>
+    <% } %>
 
     <!-- Include the view file for the current controller/route -->
-    <%- body %>
+    <div class="primary <%- typeof extraClass == "undefined"? "" : extraClass %>">
+      <%- body %>
+    </div>
 
 
     <!--
@@ -92,5 +112,10 @@
 
     -->
 
+    <script src="//ajax.googleapis.com/ajax/libs/jquery/1.10.2/jquery.min.js"></script>
+    <script>window.jQuery || document.write('<script src="js/vendor/jquery-1.10.2.min.js"><\/script>')</script>
+    <script src="/js/background-check.js"></script>
+    <script src="/js/plugins.js"></script>
+    <script src="/js/main.js"></script>
     </body>
 </html>

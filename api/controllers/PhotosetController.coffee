@@ -35,46 +35,61 @@ module.exports = {
   # index : (req, res)->
   #   res.view 'photoset/index'
 
-  add : (req, res)->
-    res.view 'photoset/add'
+  index : (req, res)->
+    res.view 'photoset/index',
+      sidebarPartial : 'photoset/indexSidebar'
+
+  find : (req, res)->
+    res.view 'photoset/find',
+      sidebarPartial : 'photoset/findSidebar'
+      sidebarContent :
+        hello : 'world'
 
   create : (req, serverResponse)->
 
     if not req.param 'socket'
-      return serverResponse.view 'photoset/create'
+      return serverResponse.view 'photoset/create',
+        sidebarPartial : 'photoset/createSidebar'
 
-    if not req.param 'imageURL'
+    if not req.param('realityURL') or not req.param('captureURL')
       return serverResponse.json success : false
     
     serverResponse.json
       success: true
       message: 'hello'
 
-    imageRequest = http.get req.param('imageURL'), (res)->
-      uploadToS3 res
-    imageRequest.on 'error', (err)->
-      handleError 'cannot fetch'+err
+    finished = 0
 
-    uploadToS3 = (res)->
-      headers =
-        'Content-Length': res.headers['content-length']
-        'Content-Type': res.headers['content-type']
+    upload = (which, imageURL)->
+      imageRequest = http.get imageURL, (res)->
+        uploadToS3 res
+      imageRequest.on 'error', (err)->
+        handleError 'cannot fetch'+err
 
-      client.putStream(res, '/doodle.png', headers, handleUploadResult)
-      .on 'progress', (result)->
-        req.socket.emit 'progress', result.percent
+      uploadToS3 = (res)->
+        headers =
+          'Content-Length': res.headers['content-length']
+          'Content-Type': res.headers['content-type']
 
-    handleUploadResult = (err, res)->
-      return handleError 'upload error'+err if err
+        client.putStream(res, '/doodle'+Math.random()+'.png', headers, handleUploadResult)
+        .on 'progress', (result)->
+          req.socket.emit 'progress', {percent: result.percent, which}
 
-      Photoset.create
-        reality : req.param 'reality'
-        capture : req.param 'capture'
-        address : req.param 'address'
-      .done (err, photoset)->
-        req.socket.emit 'done', photoset.id
+      handleUploadResult = (err, res)->
+        return handleError 'upload error'+err if err
+        finished++
+        if finished is 2 #both finished
+          Photoset.create
+            reality : req.param 'realityURL'
+            capture : req.param 'captureURL'
+            address : req.param 'address'
+          .done (err, photoset)->
+            req.socket.emit 'done', photoset.id
 
-    handleError = (err)->
-      console.log err
-      # serverResponse.send err
+      handleError = (err)->
+        console.log err
+        socket.emit 'fail', err
+
+    upload 'reality', req.param 'realityURL'
+    upload 'capture', req.param 'captureURL'
 }
