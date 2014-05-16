@@ -396,5 +396,29 @@ nav, .nav-background
         bottom: 30px
         z-index: 2
 
+    .error-message
+      background: rgb(233, 97, 97)
+      position: relative
+      color: white
+      padding: 5px 10px
+      border-radius: 3px
+      font-size: 14px
+      margin-top: -20px
+      display: inline-block
+      &:before
+        content: ""
+        border-width: 7px
+        border-color: transparent transparent rgb(233, 97, 97)
+        position: absolute
+        left: 50%
+        top: 0
+        z-index: 4
+        border-radius: 0
+        border-style: solid
+        margin-left: -7px
+        margin-top: -14px
+      &.hidden
+        display: none
+
 .clearfix
   clear: both

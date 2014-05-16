@@ -18,6 +18,7 @@ $('#create-photoset').on 'submit', (e)->
 
   $(@).find('input').prop 'disabled', true
   $('form .error').removeClass 'error'
+  $('.error-message').fadeOut()
   socket.removeAllListeners 'fail'
 
   enableInput = =>
@@ -42,9 +43,10 @@ $('#create-photoset').on 'submit', (e)->
   handleFail = (err)->
     if err.which is "reality"
       $('form input.reality').addClass 'error'
+      $('form input.reality').siblings('.error-message').fadeIn().html err.message
     else if err.which is "capture"
       $('form input.capture').addClass 'error'
-    alert err.which + err.message
+      $('form input.capture').siblings('.error-message').fadeIn().html err.message
     enableInput()
 
   fetchImage $('#create-photoset input.reality').val(), $('#create-photoset input.capture').val()

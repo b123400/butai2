@@ -43,10 +43,13 @@ module.exports = {
       sidebarPartial : 'photoset/indexSidebar'
 
   find : (req, res)->
-    res.view 'photoset/find',
-      sidebarPartial : 'photoset/findSidebar'
-      sidebarContent :
-        hello : 'world'
+    Photoset.findOne(req.param('id')).exec (err, photoset)->
+      res.view 'photoset/find',
+        sidebarPartial : 'photoset/findSidebar'
+        sidebarContent :
+          hello : 'world'
+        photoset : photoset
+        error : err
 
   create : (req, serverResponse)->
 
@@ -77,11 +80,12 @@ module.exports = {
     upload = (which, imageURL)->
       handleError = (err)->
         console.log err
-        req.socket.emit 'fail', {which, message:err}
+        setTimeout ->
+          req.socket.emit 'fail', {which, message:err}
 
       urlDetails = Url.parse imageURL
       console.log urlDetails
-      return handleError 'Protocol Wrong, accept http/https only' if urlDetails.protocol.replace(/[:\/]/g,"") not in ['http','https']
+      return handleError 'Protocol Wrong, accept http/https only' if urlDetails.protocol not in ['http:','https:']
 
       imageRequest = Request imageURL
 
@@ -93,17 +97,20 @@ module.exports = {
       imageRequest.on 'error', (err)->
         handleError 'Cannot fetch: '+err
 
-      getFilename =->
-        if which is 'reality' then realityFilename else captureFilename
-
       uploadToS3 = (res)->
         headers =
           'Content-Length': res.headers['content-length']
           'Content-Type': res.headers['content-type']
+          'x-amz-acl': 'public-read'
 
         extension = allowedContentType[res.headers['content-type']]
+        thisFilename = ""
+        if which is 'reality'
+          thisFilename = realityFilename += extension
+        else
+          thisFilename = captureFilename += extension
 
-        client.putStream(res, getFilename()+'.'+extension, headers, handleUploadResult)
+        client.putStream(res, thisFilename, headers, handleUploadResult)
         .on 'progress', (result)->
           req.socket.emit 'progress', {percent: result.percent, which}
 

@@ -307,6 +307,29 @@ nav, .nav-background {
         top: 0;
         bottom: 30px;
         z-index: 2; }
+    .primary form .error-message {
+      background: #e96161;
+      position: relative;
+      color: white;
+      padding: 5px 10px;
+      border-radius: 3px;
+      font-size: 14px;
+      margin-top: -20px;
+      display: inline-block; }
+      .primary form .error-message:before {
+        content: "";
+        border-width: 7px;
+        border-color: transparent transparent #e96161;
+        position: absolute;
+        left: 50%;
+        top: 0;
+        z-index: 4;
+        border-radius: 0;
+        border-style: solid;
+        margin-left: -7px;
+        margin-top: -14px; }
+      .primary form .error-message.hidden {
+        display: none; }
 
 .clearfix {
   clear: both; }
