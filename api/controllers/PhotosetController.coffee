@@ -57,7 +57,11 @@ module.exports = {
       return serverResponse.view 'photoset/create',
         sidebarPartial : 'photoset/createSidebar'
 
-    if not req.param('realityURL') or not req.param('captureURL')
+    fetchCount = 0
+    fetchCount++ if req.param('realityURL')?
+    fetchCount++ if req.param('captureURL')?
+
+    if fetchCount is 0
       return serverResponse.json success : false
     
     serverResponse.json
@@ -74,8 +78,8 @@ module.exports = {
 
     maxFilesize = 5*1024*1024 #5MB
 
-    realityFilename = uuid.v4()
-    captureFilename = uuid.v4()
+    realityFilename = uuid.v4() if req.param('realityURL')?
+    captureFilename = uuid.v4() if req.param('captureURL')?
 
     upload = (which, imageURL)->
       handleError = (err)->
@@ -106,9 +110,9 @@ module.exports = {
         extension = allowedContentType[res.headers['content-type']]
         thisFilename = ""
         if which is 'reality'
-          thisFilename = realityFilename += extension
+          thisFilename = realityFilename += '.'+extension
         else
-          thisFilename = captureFilename += extension
+          thisFilename = captureFilename += '.'+extension
 
         client.putStream(res, thisFilename, headers, handleUploadResult)
         .on 'progress', (result)->
@@ -117,7 +121,7 @@ module.exports = {
       handleUploadResult = (err, res)->
         return handleError 'Upload error: '+err if err
         finished++
-        if finished is 2 #both finished
+        if finished is fetchCount #all finished
           Photoset.create
             reality : realityFilename
             capture : captureFilename
@@ -125,6 +129,6 @@ module.exports = {
           .done (err, photoset)->
             req.socket.emit 'done', photoset.id
 
-    upload 'reality', req.param 'realityURL'
-    upload 'capture', req.param 'captureURL'
+    upload 'reality', req.param 'realityURL' if req.param 'realityURL'
+    upload 'capture', req.param 'captureURL' if req.param 'captureURL'
 }

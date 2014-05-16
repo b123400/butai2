@@ -13,8 +13,8 @@
         </script>
         
         <div class="photoset">
-            <img class="photo" src="https://s3-ap-northeast-1.amazonaws.com/b123400test2/<%- photoset.reality %>" />
-            <img class="capture" src="https://s3-ap-northeast-1.amazonaws.com/b123400test2/<%- photoset.capture %>" />
+            <img class="photo" src="<%- photoset.getImageURL('reality') %>" />
+            <img class="capture" src="<%- photoset.getImageURL('capture') %>" />
             <div class="clearfix"></div>
         </div>
         
