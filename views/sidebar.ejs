@@ -1,5 +1,5 @@
 <nav>
-    <a href="" class="logo">Butai</a>
+    <a href="/" class="logo">Butai</a>
 
     <% if(typeof sidebarPartial !== "undefined" && typeof sidebarContent !== "undefined"){ %>
         <%- partial(sidebarPartial,sidebarContent) %>
@@ -8,8 +8,8 @@
     <% } %>
 
     <div class="bottom">
-        <a href="">投稿</a>
-        <a href="">地図</a>
-        <a href="">ログイン</a>
+        <a href="/add">投稿</a>
+        <a href="/map">地図</a>
+        <a href="/login">ログイン</a>
     </div>
 </nav>

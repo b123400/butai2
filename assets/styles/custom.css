@@ -282,6 +282,8 @@ nav, .nav-background {
       margin-bottom: 30px;
       border-style: dotted;
       outline: none; }
+      .primary form input[type=text].error, .primary form input[type=password].error {
+        background: #ffc7c7; }
     .primary form input[type=submit] {
       background: #47dbc3;
       border: 0;

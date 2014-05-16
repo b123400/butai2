@@ -18,6 +18,9 @@
 http = require 'http'
 knox = require 'knox'
 sails = require 'sails'
+Url = require 'url'
+uuid = require 'node-uuid'
+Request = require 'request'
 
 client = knox.createClient sails.config.aws
 
@@ -59,36 +62,61 @@ module.exports = {
       message: 'hello'
 
     finished = 0
+    allowedContentType =
+      'image/gif'  : 'gif'
+      'image/jpg'  : 'jpg'
+      'image/jpeg' : 'jpg'
+      'image/pjpeg': 'jpg'
+      'image/png'  : 'png'
+
+    maxFilesize = 5*1024*1024 #5MB
+
+    realityFilename = uuid.v4()
+    captureFilename = uuid.v4()
 
     upload = (which, imageURL)->
-      imageRequest = http.get imageURL, (res)->
+      handleError = (err)->
+        console.log err
+        req.socket.emit 'fail', {which, message:err}
+
+      urlDetails = Url.parse imageURL
+      console.log urlDetails
+      return handleError 'Protocol Wrong, accept http/https only' if urlDetails.protocol.replace(/[:\/]/g,"") not in ['http','https']
+
+      imageRequest = Request imageURL
+
+      imageRequest.on 'response', (res)->
+        return handleError 'Wrong format' if not allowedContentType[res.headers['content-type']]
+        return handleError 'Too large, max 5MB' if res.headers['content-length'] > maxFilesize
         uploadToS3 res
+
       imageRequest.on 'error', (err)->
-        handleError 'cannot fetch'+err
+        handleError 'Cannot fetch: '+err
+
+      getFilename =->
+        if which is 'reality' then realityFilename else captureFilename
 
       uploadToS3 = (res)->
         headers =
           'Content-Length': res.headers['content-length']
           'Content-Type': res.headers['content-type']
 
-        client.putStream(res, '/doodle'+Math.random()+'.png', headers, handleUploadResult)
+        extension = allowedContentType[res.headers['content-type']]
+
+        client.putStream(res, getFilename()+'.'+extension, headers, handleUploadResult)
         .on 'progress', (result)->
           req.socket.emit 'progress', {percent: result.percent, which}
 
       handleUploadResult = (err, res)->
-        return handleError 'upload error'+err if err
+        return handleError 'Upload error: '+err if err
         finished++
         if finished is 2 #both finished
           Photoset.create
-            reality : req.param 'realityURL'
-            capture : req.param 'captureURL'
+            reality : realityFilename
+            capture : captureFilename
             address : req.param 'address'
           .done (err, photoset)->
             req.socket.emit 'done', photoset.id
-
-      handleError = (err)->
-        console.log err
-        socket.emit 'fail', err
 
     upload 'reality', req.param 'realityURL'
     upload 'capture', req.param 'captureURL'
