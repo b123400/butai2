@@ -21,6 +21,19 @@ sails = require 'sails'
 Url = require 'url'
 uuid = require 'node-uuid'
 Request = require 'request'
+stream = require 'stream'
+util = require 'util'
+
+# class Forwarder extends stream.Transform
+#   _transform: (chunk, encoding, callback) ->
+#     this.push(chunk);
+#     callback();
+#   constructor: ->
+#     @writable = true
+#   write: (chunk, encoding) ->
+#     @emit 'data', chunk
+#   end: ->
+#     @emit 'end'
 
 client = knox.createClient sails.config.aws
 
@@ -57,11 +70,11 @@ module.exports = {
       return serverResponse.view 'photoset/create',
         sidebarPartial : 'photoset/createSidebar'
 
-    fetchCount = 0
-    fetchCount++ if req.param('realityURL')?
-    fetchCount++ if req.param('captureURL')?
+    fileCount = 0
+    fileCount++ if req.param('reality') isnt ""
+    fileCount++ if req.param('capture') isnt ""
 
-    if fetchCount is 0
+    if fileCount is 0
       return serverResponse.json success : false
     
     serverResponse.json
@@ -78,57 +91,82 @@ module.exports = {
 
     maxFilesize = 5*1024*1024 #5MB
 
-    realityFilename = uuid.v4() if req.param('realityURL')?
-    captureFilename = uuid.v4() if req.param('captureURL')?
+    realityFilename = uuid.v4() if req.param('reality')?
+    captureFilename = uuid.v4() if req.param('capture')?
 
-    upload = (which, imageURL)->
-      handleError = (err)->
-        console.log err
-        setTimeout ->
-          req.socket.emit 'fail', {which, message:err}
+    handleError = (which, err)->
+      console.log err
+      setTimeout ->
+        req.socket.emit 'fail', {which, message:err}
 
+    fetchImage = (which, imageURL)->
       urlDetails = Url.parse imageURL
       console.log urlDetails
-      return handleError 'Protocol Wrong, accept http/https only' if urlDetails.protocol not in ['http:','https:']
+      return handleError which, 'Protocol Wrong, accept http/https only' if urlDetails.protocol not in ['http:','https:']
 
       imageRequest = Request imageURL
 
       imageRequest.on 'response', (res)->
-        return handleError 'Wrong format' if not allowedContentType[res.headers['content-type']]
-        return handleError 'Too large, max 5MB' if res.headers['content-length'] > maxFilesize
-        uploadToS3 res
+        uploadToS3 which, res
 
       imageRequest.on 'error', (err)->
         handleError 'Cannot fetch: '+err
 
-      uploadToS3 = (res)->
-        headers =
-          'Content-Length': res.headers['content-length']
-          'Content-Type': res.headers['content-type']
-          'x-amz-acl': 'public-read'
+    uploadToS3 = (which, stream)->
+      return handleError which, 'Wrong format' if not allowedContentType[stream.headers['content-type']]
+      return handleError which, 'Too large, max 5MB' if stream.headers['content-length'] > maxFilesize
+      headers =
+        'Content-Length': stream.headers['content-length']
+        'Content-Type': stream.headers['content-type']
+        'x-amz-acl': 'public-read'
 
-        extension = allowedContentType[res.headers['content-type']]
-        thisFilename = ""
-        if which is 'reality'
-          thisFilename = realityFilename += '.'+extension
-        else
-          thisFilename = captureFilename += '.'+extension
+      extension = allowedContentType[stream.headers['content-type']]
+      thisFilename = ""
+      if which is 'reality'
+        thisFilename = realityFilename += '.'+extension
+      else
+        thisFilename = captureFilename += '.'+extension
 
-        client.putStream(res, thisFilename, headers, handleUploadResult)
-        .on 'progress', (result)->
-          req.socket.emit 'progress', {percent: result.percent, which}
+      client.putStream(stream, thisFilename, headers, handleUploadResult.bind(null,which))
+      .on 'progress', (result)->
+        console.log result
+        req.socket.emit 'progress', {percent: result.percent, which}
+      .on 'error', (e)->
+        console.log e
+        throw e
 
-      handleUploadResult = (err, res)->
-        return handleError 'Upload error: '+err if err
-        finished++
-        if finished is fetchCount #all finished
-          Photoset.create
-            reality : realityFilename
-            capture : captureFilename
-            address : req.param 'address'
-          .done (err, photoset)->
-            req.socket.emit 'done', photoset.id
+    handleUploadResult = (which, err, res)->
+      console.log res
+      return handleError which, 'Upload error: '+err if err
+      finished++
+      if finished is fileCount #all finished
+        Photoset.create
+          reality : realityFilename
+          capture : captureFilename
+          address : req.param 'address'
+        .done (err, photoset)->
+          req.socket.emit 'done', photoset.id
 
-    upload 'reality', req.param 'realityURL' if req.param 'realityURL'
-    upload 'capture', req.param 'captureURL' if req.param 'captureURL'
+    processParam =(which)->
+      val = req.param which
+      if val is "file"
+        customStream = stream.PassThrough();
+        customStream.headers =
+          'content-type' : req.param "#{which}-file-type"
+          'content-length' : req.param "#{which}-file-size"
+        req.socket.on 'file', (file)->
+          return if file.which isnt which
+          file.data = new Buffer(file.data,'base64');
+          console.log 'write', file.data.length
+          customStream.write file.data
+        req.socket.on 'file-done', (data)->
+          console.log 'end', data, which
+          return if data.which isnt which
+          customStream.end()
+        uploadToS3 which, customStream
+      else if val isnt ""
+        fetchImage which, val
+
+    processParam 'reality'
+    processParam 'capture'
 }
