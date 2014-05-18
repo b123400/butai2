@@ -31,8 +31,10 @@ $('#create-photoset').on 'submit', (e)->
     startData =
       socket : true
       reality : formData.reality
-      capture : formData.capture      
+      capture : formData.capture
       address : formData.address
+      lat : formData.lat
+      lng : formData.lng
 
     if formData.reality instanceof File
       startData.reality = "file"
@@ -106,6 +108,8 @@ $('#create-photoset').on 'submit', (e)->
     reality : $('input[type=file].reality')[0].files[0] || $('#create-photoset input.reality').val()
     capture : $('input[type=file].capture')[0].files[0] || $('#create-photoset input.capture').val()
     address : $('input.address').val()
+    lat : $('.map-canvas').data('location')?.lat?()
+    lng : $('.map-canvas').data('location')?.lng?()
 
 $('.select-file').on 'click', ->
   $(@).siblings('input[type=file]').click()
@@ -113,3 +117,29 @@ $('input[type=file]').on 'change', ->
   $(@).siblings('input[type=text]').prop
     disabled : true
     placeholder : "選択した"
+
+$('#create-photoset .map-canvas').each (index, mapDiv)->
+  initialize =->
+    mapOptions = 
+      center: new google.maps.LatLng(-34.397, 150.644),
+      zoom: 8
+
+    map = new google.maps.Map(mapDiv,mapOptions)
+
+    thisMarker = undefined
+    placeMarker= (location) ->
+      if !thisMarker
+        thisMarker = new google.maps.Marker({
+          position: location,
+          map: map
+        })
+      else
+        thisMarker.setPosition location
+      $(mapDiv).data 'location',location
+    # panorama.setPosition location
+    # google.maps.event.trigger map, 'picked_location', location
+
+    google.maps.event.addListener map, 'rightclick', (event) ->
+      placeMarker event.latLng
+  
+  google.maps.event.addDomListener window, 'load', initialize

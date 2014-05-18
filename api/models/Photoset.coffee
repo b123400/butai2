@@ -16,6 +16,8 @@ module.exports = {
     reality : 'string'
     capture : 'string'
     address : 'string'
+    lat : 'float'
+    lng : 'float'
     
     getImageURL : (which)->
       baseURL = "https://s3-ap-northeast-1.amazonaws.com/b123400test2/"

@@ -144,6 +144,8 @@ module.exports = {
           reality : realityFilename
           capture : captureFilename
           address : req.param 'address'
+          lat     : req.param 'lat'
+          lng     : req.param 'lng'
         .done (err, photoset)->
           req.socket.emit 'done', photoset.id
 
