@@ -15,6 +15,7 @@ module.exports = {
     ###
     reality : 'string'
     capture : 'string'
+    url     : 'url'
     address : 'string'
     lat : 'float'
     lng : 'float'

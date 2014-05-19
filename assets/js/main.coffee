@@ -28,13 +28,7 @@ $('#create-photoset').on 'submit', (e)->
     $(@).find('input').prop 'disabled', false
 
   submitForm = (formData)->
-    startData =
-      socket : true
-      reality : formData.reality
-      capture : formData.capture
-      address : formData.address
-      lat : formData.lat
-      lng : formData.lng
+    startData = $.extend socket : true, formData
 
     if formData.reality instanceof File
       startData.reality = "file"
@@ -55,6 +49,8 @@ $('#create-photoset').on 'submit', (e)->
         socket.once 'done', (id)->
           location.href = '/photoset/find/'+id
       else
+        if result.message
+          alert result.message
         enableInput()
 
     upload = (which, file)->
@@ -107,9 +103,10 @@ $('#create-photoset').on 'submit', (e)->
   submitForm
     reality : $('input[type=file].reality')[0].files[0] || $('#create-photoset input.reality').val()
     capture : $('input[type=file].capture')[0].files[0] || $('#create-photoset input.capture').val()
-    address : $('input.address').val()
+    url : $('input.url').val()
     lat : $('.map-canvas').data('location')?.lat?()
     lng : $('.map-canvas').data('location')?.lng?()
+    address : $('.map-canvas').data('address')
 
 $('.select-file').on 'click', ->
   $(@).siblings('input[type=file]').click()
@@ -129,13 +126,15 @@ $('#create-photoset .map-canvas').each (index, mapDiv)->
     thisMarker = undefined
     placeMarker= (location) ->
       if !thisMarker
-        thisMarker = new google.maps.Marker({
+        thisMarker = new google.maps.Marker
           position: location,
           map: map
-        })
       else
         thisMarker.setPosition location
       $(mapDiv).data 'location',location
+      geocoder = new google.maps.Geocoder
+      geocoder.geocode {'latLng':location}, (results, status) ->
+        $(mapDiv).data 'address', results[0]?.formatted_address
     # panorama.setPosition location
     # google.maps.event.trigger map, 'picked_location', location
 
@@ -153,7 +152,7 @@ $('.map-canvas[data-map]').each (index, mapDiv)->
     $(mapDiv).data 'map', map
     #add marker
     thisMarker = new google.maps.Marker
-      position: new google.maps.LatLng(mapData.lat, mapData.lng),
+      position: new google.maps.LatLng(mapData.lat, mapData.lng)
       map: map
 
   google.maps.event.addDomListener(window, 'load', initialize);

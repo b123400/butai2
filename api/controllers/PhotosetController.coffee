@@ -23,6 +23,7 @@ uuid = require 'node-uuid'
 Request = require 'request'
 stream = require 'stream'
 util = require 'util'
+validator = require 'validator'
 
 # class Forwarder extends stream.Transform
 #   _transform: (chunk, encoding, callback) ->
@@ -76,8 +77,15 @@ module.exports = {
     fileCount++ if req.param('reality') isnt ""
     fileCount++ if req.param('capture') isnt ""
 
+    isUrl = validator.isURL req.param 'url'
     if fileCount is 0
-      return serverResponse.json success : false
+      return serverResponse.json
+        success : false
+        message : 'No file'
+    if not isUrl
+      return serverResponse.json
+        success : false
+        message : 'URL not correct'
     
     serverResponse.json
       success: true
@@ -138,17 +146,21 @@ module.exports = {
         throw e
 
     handleUploadResult = (which, err, res)->
-      console.log res
       return handleError which, 'Upload error: '+err if err
       finished++
       if finished is fileCount #all finished
         Photoset.create
           reality : realityFilename
           capture : captureFilename
+          url     : if validator.isURL req.param 'url' then req.param 'url' else null
           address : req.param 'address'
           lat     : req.param 'lat'
           lng     : req.param 'lng'
         .done (err, photoset)->
+          if err
+            console.log err
+            req.socket.emit 'fail', err
+            return
           req.socket.emit 'done', photoset.id
 
     processParam =(which)->
