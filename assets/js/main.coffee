@@ -143,3 +143,17 @@ $('#create-photoset .map-canvas').each (index, mapDiv)->
       placeMarker event.latLng
   
   google.maps.event.addDomListener window, 'load', initialize
+
+$('.map-canvas[data-map]').each (index, mapDiv)->
+  mapData = $.parseJSON($(@).attr('data-map'))
+  initialize =->
+    map = new google.maps.Map mapDiv,
+      center: new google.maps.LatLng(mapData.lat , mapData.lng),
+      zoom: 8
+    $(mapDiv).data 'map', map
+    #add marker
+    thisMarker = new google.maps.Marker
+      position: new google.maps.LatLng(mapData.lat, mapData.lng),
+      map: map
+
+  google.maps.event.addDomListener(window, 'load', initialize);

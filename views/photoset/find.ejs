@@ -1,16 +1,5 @@
         <script type="text/javascript" src="https://maps.googleapis.com/maps/api/js?key=AIzaSyAh0z9PrtdXhd84WvhdTMcbRd_krXYZPLM&sensor=false">
         </script>
-        <script type="text/javascript">
-          function initialize() {
-            var mapOptions = {
-              center: new google.maps.LatLng(<%- photoset.lat %>, <%- photoset.lng %>),
-              zoom: 8
-            };
-            var map = new google.maps.Map(document.getElementsByClassName("map-canvas")[0],
-                mapOptions);
-          }
-          google.maps.event.addDomListener(window, 'load', initialize);
-        </script>
         
         <div class="photoset">
             <img class="photo" src="<%- photoset.getImageURL('reality') %>" />
@@ -18,9 +7,11 @@
             <div class="clearfix"></div>
         </div>
         
-        <div class="photoset-map">
-            <div class="map-canvas"></div>
-        </div>
+        <% if( photoset.lat && photoset.lng ){ %>
+            <div class="photoset-map">
+                <div class="map-canvas" data-map='{"lat":<%- photoset.lat %>, "lng":<%- photoset.lng %>}'></div>
+            </div>
+        <% } %>
 
         <div class="comments">
             <div class="comment">
