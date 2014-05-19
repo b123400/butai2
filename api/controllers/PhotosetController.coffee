@@ -52,8 +52,10 @@ module.exports = {
   #   res.view 'photoset/index'
 
   index : (req, res)->
-    res.view 'photoset/index',
-      sidebarPartial : 'photoset/indexSidebar'
+    Photoset.find().limit().done (err, photosets)->
+      res.view 'photoset/index',
+        sidebarPartial : 'photoset/indexSidebar',
+        photosets : photosets
 
   find : (req, res)->
     Photoset.findOne(req.param('id')).exec (err, photoset)->
