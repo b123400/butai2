@@ -64,6 +64,7 @@ module.exports = {
         sidebarPartial : 'photoset/findSidebar'
         sidebarContent :
           hello : 'world'
+          photoset : photoset
         photoset : photoset
         error : err
 
