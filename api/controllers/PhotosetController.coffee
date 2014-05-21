@@ -83,7 +83,7 @@ module.exports = {
       return serverResponse.json
         success : false
         message : 'No file'
-    if not isUrl
+    if not isUrl and req.param 'url' isnt ""
       return serverResponse.json
         success : false
         message : 'URL not correct'
