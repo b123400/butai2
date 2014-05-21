@@ -27,8 +27,8 @@ module.exports = {
   _config: {}
 
   find : (req, res)->
-    Artwork.findOne { id: req.param 'id' }, (err, artwork)->
-      res.view 'artwork/find', {artwork}
+    Photoset.find { artwork_id: req.param 'id' }, (err, photosets)->
+      res.view 'photoset/index', {photosets}
 
   index : (req, res)->
     Artwork.find().done (err, artworks)->
@@ -36,4 +36,10 @@ module.exports = {
         artworks,
         extraClass : 'extend-right'
       }
+
+  create : (req, res)->
+    Artwork.create
+      name : req.param 'name'
+    .done (err, result)->
+      res.json result
 }

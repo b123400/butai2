@@ -107,6 +107,7 @@ $('#create-photoset').on 'submit', (e)->
     lat : $('.map-canvas').data('location')?.lat?()
     lng : $('.map-canvas').data('location')?.lng?()
     address : $('.map-canvas').data('address')
+    artwork : $('.artwork').val()
 
 $('.select-file').on 'click', ->
   $(@).siblings('input[type=file]').click()

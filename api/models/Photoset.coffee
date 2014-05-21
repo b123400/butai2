@@ -19,6 +19,7 @@ module.exports = {
     address : 'string'
     lat : 'float'
     lng : 'float'
+    artwork_id : 'integer'
     
     getImageURL : (which)->
       baseURL = "https://s3-ap-northeast-1.amazonaws.com/b123400test2/"

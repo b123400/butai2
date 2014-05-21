@@ -140,7 +140,7 @@ module.exports = {
 
       client.putStream(stream, thisFilename, headers, handleUploadResult.bind(null,which))
       .on 'progress', (result)->
-        console.log result
+        # console.log result
         req.socket.emit 'progress', {percent: result.percent, which}
       .on 'error', (e)->
         console.log e
@@ -149,20 +149,44 @@ module.exports = {
     handleUploadResult = (which, err, res)->
       return handleError which, 'Upload error: '+err if err
       finished++
-      if finished is fileCount #all finished
-        Photoset.create
-          reality : realityFilename
-          capture : captureFilename
-          url     : if validator.isURL req.param 'url' then req.param 'url' else null
-          address : req.param 'address'
-          lat     : req.param 'lat'
-          lng     : req.param 'lng'
-        .done (err, photoset)->
+      return if finished isnt fileCount #all finished
+
+      #find artwork
+      if not req.param('artwork') or req.param('artwork') is ""
+        return createPhotoset()
+
+      Artwork.findOne {name: req.param 'artwork'}, (err, artwork)->
+        if err
+          console.log err
+          return createPhotoset()
+        if artwork
+          return createPhotoset artwork
+        
+        # no such artwork, create now
+        Artwork.create
+          name : req.param 'artwork'
+        .done (err, artwork)->
           if err
             console.log err
-            req.socket.emit 'fail', err
-            return
-          req.socket.emit 'done', photoset.id
+            createPhotoset()
+          else
+            createPhotoset artwork
+
+    createPhotoset = (artwork)->
+      Photoset.create
+        reality : realityFilename
+        capture : captureFilename
+        url     : if validator.isURL req.param 'url' then req.param 'url' else null
+        address : req.param 'address'
+        lat     : req.param 'lat'
+        lng     : req.param 'lng'
+        artwork_id : artwork?.id
+      .done (err, photoset)->
+        if err
+          console.log err
+          req.socket.emit 'fail', err
+          return
+        req.socket.emit 'done', photoset.id
 
     processParam =(which)->
       val = req.param which
