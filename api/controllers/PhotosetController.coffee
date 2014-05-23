@@ -53,6 +53,7 @@ module.exports = {
   #   res.view 'photoset/index'
 
   index : (req, res)->
+    console.log Artwork.yoyo
     Photoset.find().limit().done (err, photosets)->
       res.view 'photoset/index',
         sidebarPartial : 'photoset/indexSidebar',
@@ -146,6 +147,24 @@ module.exports = {
         console.log e
         throw e
 
+    getArtwork = (name, cb)->
+      Artwork.findOne {name}, (err, artwork)->
+        if err
+          console.log err
+          return cb err
+        if artwork
+          return cb null, artwork
+        
+        # no such artwork, create now
+        Artwork.create
+          name : name
+        .done (err, artwork)->
+          if err
+            console.log err
+            cb err
+          else
+            cb null, artwork
+
     handleUploadResult = (which, err, res)->
       return handleError which, 'Upload error: '+err if err
       finished++
@@ -155,22 +174,11 @@ module.exports = {
       if not req.param('artwork') or req.param('artwork') is ""
         return createPhotoset()
 
-      Artwork.findOne {name: req.param 'artwork'}, (err, artwork)->
+      getArtwork req.param('artwork'), (err, artwork)->
         if err
-          console.log err
-          return createPhotoset()
-        if artwork
-          return createPhotoset artwork
-        
-        # no such artwork, create now
-        Artwork.create
-          name : req.param 'artwork'
-        .done (err, artwork)->
-          if err
-            console.log err
-            createPhotoset()
-          else
-            createPhotoset artwork
+          createPhotoset()
+        else
+          createPhotoset artwork
 
     createPhotoset = (artwork)->
       Photoset.create
