@@ -1,14 +1,19 @@
             <div class="artworks">
-                <div class="artwork">
-                    <div class="capture" style="background-image:url(http://s3-ap-northeast-1.amazonaws.com/butai/87/captures_medium.png?1380457234)"></div>
-<!--                     <div class="photo" style="background-image:url(http://s3-ap-northeast-1.amazonaws.com/butai/53/captures_medium.jpg?1377529361)"></div> -->
-                    <div class="photo" style="background-image:url(http://s3-ap-northeast-1.amazonaws.com/butai/87/photos_medium.png?1380457230)"></div>
-                    <p class="caption">
-                        <span class="artwork">けいおん！</span>
-                        <span class="location">京都</span>
-                    </p>
-                </div>
-                <div class="artwork">
+                <% artworks.forEach(function(artwork){ %>
+                    <div class="artwork">
+                        <div class="capture" style="background-image:url(http://s3-ap-northeast-1.amazonaws.com/butai/87/captures_medium.png?1380457234)"></div>
+    <!--                     <div class="photo" style="background-image:url(http://s3-ap-northeast-1.amazonaws.com/butai/53/captures_medium.jpg?1377529361)"></div> -->
+                        <div class="photo" style="background-image:url(http://s3-ap-northeast-1.amazonaws.com/butai/87/photos_medium.png?1380457230)"></div>
+                        <p class="caption">
+                            <span class="artwork"><%- artwork.name %></span>
+                            <span class="location">京都</span>
+                        </p>
+                    </div>
+                <% }) %>
+            </div>
+
+            <!-- 
+                            <div class="artwork">
                     <div class="capture" style="background-image:url(http://s3-ap-northeast-1.amazonaws.com/butai/53/captures_medium.jpg?1377529361)"></div>
                     <div class="photo" style="background-image:url(http://s3-ap-northeast-1.amazonaws.com/butai/53/photos_medium.png?1380457230)"></div>
                     <p class="caption">
@@ -40,4 +45,4 @@
                         <span class="location">京都</span>
                     </p>
                 </div>
-            </div>
+             -->
