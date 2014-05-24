@@ -14,6 +14,7 @@
  *
  * @docs        :: http://sailsjs.org/#!documentation/controllers
  ###
+Q = require 'q'
 
 module.exports = {
     
@@ -32,10 +33,15 @@ module.exports = {
 
   index : (req, res)->
     Artwork.find().done (err, artworks)->
-      res.view 'artwork/index', {
-        artworks,
-        extraClass : 'extend-right'
-      }
+      promises = artworks.map (thisArtwork)->
+        Q.ninvoke(thisArtwork,"preparePhotosets",1) # count = 1
+      console.log promises
+
+      Q.all(promises).done ->
+        res.view 'artwork/index', {
+          artworks,
+          extraClass : 'extend-right'
+        }
 
   create : (req, res)->
     Artwork.create

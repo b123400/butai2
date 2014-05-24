@@ -70,7 +70,6 @@ module.exports = {
         error : err
 
   create : (req, serverResponse)->
-
     if not req.param 'socket'
       return serverResponse.view 'photoset/create',
         sidebarPartial : 'photoset/createSidebar'
@@ -147,24 +146,6 @@ module.exports = {
         console.log e
         throw e
 
-    getArtwork = (name, cb)->
-      Artwork.findOne {name}, (err, artwork)->
-        if err
-          console.log err
-          return cb err
-        if artwork
-          return cb null, artwork
-        
-        # no such artwork, create now
-        Artwork.create
-          name : name
-        .done (err, artwork)->
-          if err
-            console.log err
-            cb err
-          else
-            cb null, artwork
-
     handleUploadResult = (which, err, res)->
       return handleError which, 'Upload error: '+err if err
       finished++
@@ -174,7 +155,7 @@ module.exports = {
       if not req.param('artwork') or req.param('artwork') is ""
         return createPhotoset()
 
-      getArtwork req.param('artwork'), (err, artwork)->
+      Artwork.getOrCreate req.param('artwork'), (err, artwork)->
         if err
           createPhotoset()
         else
