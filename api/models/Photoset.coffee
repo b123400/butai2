@@ -20,6 +20,7 @@ module.exports = {
     lat : 'float'
     lng : 'float'
     artwork_id : 'integer'
+    user_id : 'integer'
     
     getImageURL : (which)->
       baseURL = "https://s3-ap-northeast-1.amazonaws.com/b123400test2/"
@@ -27,5 +28,11 @@ module.exports = {
         baseURL + @reality
       else
         baseURL + @capture
+
+    getArtwork : (cb)->
+      Artwork.findOne({id : @artwork_id}).done(cb)
+
+    getUser : (cb)->
+      User.findOne({id: @user_id}).done(cb)
   }
 }

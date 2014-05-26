@@ -35,7 +35,6 @@ module.exports = {
     Artwork.find().done (err, artworks)->
       promises = artworks.map (thisArtwork)->
         Q.ninvoke(thisArtwork,"preparePhotosets",1) # count = 1
-      console.log promises
 
       Q.all(promises).done ->
         res.view 'artwork/index', {
