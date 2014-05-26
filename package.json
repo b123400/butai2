@@ -15,7 +15,8 @@
         "node-uuid":"~1.4.1",
         "request":"~2.34.0",
         "validator" : "~3.12",
-        "q" : "~1.0"
+        "q" : "~1.0",
+        "bcrypt" : "~0.7.8"
     },
     "scripts": {
         "start": "node app.js --port 9000",
