@@ -32,13 +32,27 @@ module.exports = {
     res.view()
 
   process : (req, res)->
-    passport.authenticate 'local', (err, user, info)->
+    passport.authenticate('local', (err, user, info)->
+      console.log 'process', arguments
       if err
         console.log err
         return
 
       req.logIn user, (err)->
-        console.log err if err
+        console.log 'logIn', err if err
+        res.redirect '/'
+    )(req, res)
 
-    
+      # passport.authenticate('local', (err, user, info)->
+      #   if err or not user
+      #     console.log err
+      #     # res.redirect('/login');
+      #     return
+        
+      #   req.logIn user, (err)->
+      #     if err
+      #       res.redirect('/login');
+      #     else
+      #       res.redirect('/')
+      # )(req, res)
 }

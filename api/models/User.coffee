@@ -6,7 +6,7 @@
  * @docs        :: http://sailsjs.org/#!documentation/models
 ###
 
-bcrypt = required 'bcrypt'
+bcrypt = require 'bcrypt'
 
 module.exports = {
 
