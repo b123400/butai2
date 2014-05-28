@@ -53,10 +53,12 @@ module.exports = {
   #   res.view 'photoset/index'
 
   index : (req, res)->
-    console.log Artwork.yoyo
     Photoset.find().limit().done (err, photosets)->
       res.view 'photoset/index',
-        sidebarPartial : 'photoset/indexSidebar',
+        sidebarPartial : 'photoset/indexSidebar'
+        sidebarContent :
+          hello : 'world'
+        user : req.user?[0]
         photosets : photosets
 
   find : (req, res)->
@@ -66,6 +68,7 @@ module.exports = {
         sidebarContent :
           hello : 'world'
           photoset : photoset
+          user : req.user
         photoset : photoset
         error : err
 
