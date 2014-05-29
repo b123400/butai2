@@ -24,6 +24,16 @@ module.exports = {
       type : 'string'
       required : true
 
+    # toJSON: ->
+    #   obj = this.toObject()
+    #   delete obj.password
+    #   return obj
+
+    validPassword: (password, callback)->
+      obj = this.toObject()
+      return if not callback
+      bcrypt.compare password, obj.password, callback
+    
   }
 
   beforeCreate: (user, cb)->
@@ -35,4 +45,18 @@ module.exports = {
         else
           user.password = hash
           cb null, user
+
+  beforeUpdate: (user, cb)->
+    if not user.password
+      return cb null, user
+      
+    bcrypt.genSalt 10, (err, salt)->
+      bcrypt.hash user.password, salt, (err, hash)->
+        if err
+          console.log err
+          cb err
+        else
+          user.password = hash
+          cb null, user
+
 }
