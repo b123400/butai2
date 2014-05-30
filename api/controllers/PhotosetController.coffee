@@ -24,6 +24,7 @@ Request = require 'request'
 stream = require 'stream'
 util = require 'util'
 validator = require 'validator'
+Q = require 'q'
 
 # class Forwarder extends stream.Transform
 #   _transform: (chunk, encoding, callback) ->
@@ -63,8 +64,14 @@ module.exports = {
 
   find : (req, res)->
     Photoset.findOne(req.param('id')).exec (err, photoset)->
-      photoset.getUser (err, user)->
-        photoset.user = user
+
+      userPromise = Q.ninvoke photoset, "getUser"
+      artworkPromise = Q.ninvoke photoset, "getArtwork"
+
+      Q.all([userPromise, artworkPromise]).done (result)->
+        photoset.user = result[0]
+        photoset.artwork = result[1]
+
         res.view 'photoset/find',
           sidebarPartial : 'photoset/findSidebar'
           sidebarContent :

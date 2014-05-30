@@ -2,7 +2,9 @@
 <% if( photoset.user ){ %>
 	<a href="/u<%- photoset.user.id %>">投稿者：<%- photoset.user.username %></a>
 <% } %>
-<a href="">けいおん！</a>
+<% if( photoset.artwork ){ %>
+	<a href="/a<%- photoset.artwork.id %>"><%- photoset.artwork.name %></a>
+<% } %>
 <% if( photoset.address ){ %>
 	<a href=""><%- photoset.address %></a>
 <% } %>
