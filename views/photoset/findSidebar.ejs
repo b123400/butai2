@@ -1,5 +1,7 @@
 <img src="http://www.gravatar.com/avatar/b6a007611d9373ab5159455635ff328e?d=blank&s=150" alt="" class="avatar">
-<a href="">投稿者：<%- hello %></a>
+<% if( photoset.user ){ %>
+	<a href="/u<%- photoset.user.id %>">投稿者：<%- photoset.user.username %></a>
+<% } %>
 <a href="">けいおん！</a>
 <% if( photoset.address ){ %>
 	<a href=""><%- photoset.address %></a>

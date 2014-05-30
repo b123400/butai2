@@ -63,14 +63,14 @@ module.exports = {
 
   find : (req, res)->
     Photoset.findOne(req.param('id')).exec (err, photoset)->
-      res.view 'photoset/find',
-        sidebarPartial : 'photoset/findSidebar'
-        sidebarContent :
-          hello : 'world'
+      photoset.getUser (err, user)->
+        photoset.user = user
+        res.view 'photoset/find',
+          sidebarPartial : 'photoset/findSidebar'
+          sidebarContent :
+            photoset : photoset
           photoset : photoset
-          user : req.user
-        photoset : photoset
-        error : err
+          error : err
 
   create : (req, serverResponse)->
     if not req.param 'socket'
@@ -173,6 +173,7 @@ module.exports = {
         lat     : req.param 'lat'
         lng     : req.param 'lng'
         artwork_id : artwork?.id
+        user_id : req.user?[0]?.id
       .done (err, photoset)->
         if err
           console.log err
