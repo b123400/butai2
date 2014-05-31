@@ -7,6 +7,7 @@
 ###
 
 bcrypt = require 'bcrypt'
+crypto = require 'crypto'
 
 module.exports = {
 
@@ -24,6 +25,10 @@ module.exports = {
       type : 'string'
       required : true
 
+    email :
+      type : 'email'
+      required : true
+
     # toJSON: ->
     #   obj = this.toObject()
     #   delete obj.password
@@ -34,6 +39,9 @@ module.exports = {
       return if not callback
       bcrypt.compare password, obj.password, callback
     
+    avatarURL: (size)->
+      hash = crypto.createHash('md5').update(@email||"").digest('hex')
+      "http://www.gravatar.com/avatar/"+hash+"?d=retro&s="+size
   }
 
   beforeCreate: (user, cb)->

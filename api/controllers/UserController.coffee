@@ -27,7 +27,7 @@ module.exports = {
   _config: {}
 
   create : (req, res)->
-    if not req.param('username') or not req.param('password')
+    if not req.param('username') or not req.param('password') or not req.param('email')
       return res.view()
 
     User.findOne {username : req.param 'username'}, (err, user)->
@@ -40,8 +40,12 @@ module.exports = {
       User.create
         username : req.param 'username'
         password : req.param 'password'
+        email : req.param 'email'
       .done (err, user)->
-        return console.log err if err
+        if err
+          res.view '/user/create',
+            error : err
+          return
 
         res.view 'user/thanks'
 

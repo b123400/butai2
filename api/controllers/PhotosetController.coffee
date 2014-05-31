@@ -63,7 +63,8 @@ module.exports = {
 
   find : (req, res)->
     Photoset.findOne(req.param('id')).exec (err, photoset)->
-
+      console.log err if err
+      
       userPromise = Q.ninvoke photoset, "getUser"
       artworkPromise = Q.ninvoke photoset, "getArtwork"
 
