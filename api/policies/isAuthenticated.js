@@ -26,7 +26,7 @@ var app = require('sails').express.app,
    passport = require('passport'),
       local = require('../../config/local');
  
-app.use(passport.initialize());
+// app.use(passport.initialize());
  
 /**
  * Allow any authenticated user.
@@ -36,6 +36,9 @@ module.exports = function(req, res, ok) {
   passport.authenticate('local', function(err, user, info) {
     if (err || !user) {
       // return res.send("You are not permitted to perform this action.", 403);
+    }
+    if (user) {
+    	res.locals.user = user;
     }
     return ok();
   })(req, res, ok);

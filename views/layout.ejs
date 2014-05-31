@@ -51,8 +51,7 @@
       <%- partial('sidebar') %>
     <% } else { %>
       <%- partial('sidebar',{
-        sidebarContent : typeof sidebarContent == "undefined"? undefined : sidebarContent,
-        user : typeof user == "undefined"? undefined : user
+        sidebarContent : typeof sidebarContent == "undefined"? undefined : sidebarContent
       }) %>
     <% } %>
 

@@ -44,4 +44,8 @@ module.exports = {
         return console.log err if err
 
         res.view 'user/thanks'
+
+  find : (req, res)->
+    User.findOne {id: req.param 'id'}, (err, user)->
+      res.view '/user/find', {user}
 }

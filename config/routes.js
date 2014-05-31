@@ -39,7 +39,12 @@ module.exports.routes = {
   '/' : 'PhotosetController.index',
   '/map': 'MainController.map',
   '/add': 'PhotosetController.create',
-  '/ps:id' : 'PhotosetController.find'
+  '/ps:id' : 'PhotosetController.find',
+  '/u:id' : 'UserController.find',
+  '/a:id'  : 'Artwork.find',
+  'get /login'  : 'AuthController.login',
+  'post /login' : 'AuthController.process',
+  '/logout'     : 'AuthController.logout'
 
   /*
   // But what if you want your home page to display

@@ -69,4 +69,8 @@ module.exports = {
       #     else
       #       res.redirect('/')
       # )(req, res)
+
+  logout : (req, res)->
+    req.logout()
+    res.redirect '/'
 }

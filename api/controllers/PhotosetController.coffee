@@ -59,7 +59,6 @@ module.exports = {
         sidebarPartial : 'photoset/indexSidebar'
         sidebarContent :
           hello : 'world'
-        user : req.user?[0]
         photosets : photosets
 
   find : (req, res)->

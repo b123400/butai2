@@ -10,8 +10,8 @@
     <div class="bottom">
         <a href="/add">投稿</a>
         <a href="/map">地図</a>
-        <% if( typeof user !== "undefined" ){ %>
-            <a href="/me"><%- user.username %></a>
+        <% if( req.user && req.user[0] ){ %>
+            <a href="/me"><%- req.user[0].username %></a>
             <a href="/logout">ログアウト</a>
         <% } else { %>
             <a href="/login">ログイン</a>
