@@ -54,17 +54,42 @@ module.exports = {
   #   res.view 'photoset/index'
 
   index : (req, res)->
-    Photoset.find().limit().done (err, photosets)->
+    fetchArtwork =->
+      Q.Promise (resolve, reject)->
+        Artwork.find().limit().done (err, artworks)->
+          return reject err if err
+          resolve artworks
+
+    fetchPhotoset =->
+      Q.Promise (resolve, reject)->
+        Photoset.find().limit().done (err, photosets)->
+          return reject err if err
+          fields = photosets
+          .map (photoset)-> photoset.user_id
+          .filter (id, index, self)-> index is self.indexOf id #unique
+          .map (id)-> {id}
+
+          User.find {'or':fields}, (err, users)->
+            return reject err if err
+            _users = {}
+            users.forEach (u)-> _users[u.id] = u
+            photosets.forEach (p)-> p.user = _users[p.user_id]
+            resolve photosets
+
+    Q.all([
+      fetchArtwork()
+      fetchPhotoset()
+    ])
+    .spread (artworks, photosets)->
       res.view 'photoset/index',
         sidebarPartial : 'photoset/indexSidebar'
-        sidebarContent :
-          hello : 'world'
+        sidebarContent : {artworks}
         photosets : photosets
 
   find : (req, res)->
     Photoset.findOne(req.param('id')).exec (err, photoset)->
       console.log err if err
-      
+
       userPromise = Q.ninvoke photoset, "getUser"
       artworkPromise = Q.ninvoke photoset, "getArtwork"
 

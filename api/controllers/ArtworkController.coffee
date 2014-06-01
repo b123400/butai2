@@ -28,8 +28,16 @@ module.exports = {
   _config: {}
 
   find : (req, res)->
-    Photoset.find { artwork_id: req.param 'id' }, (err, photosets)->
-      res.view 'photoset/index', {photosets}
+    a = Q.ninvoke Artwork, "findOne", { id: req.param 'id' }
+    p = Q.ninvoke Photoset, "find", { artwork_id: req.param 'id' }
+    
+    Q.all([a,p]).spread (artwork, photosets)->
+      res.view 'photoset/index', {
+        photosets
+        sidebarPartial : 'artwork/findSidebar'
+        sidebarContent :
+          {artwork}
+        }
 
   index : (req, res)->
     Artwork.find().done (err, artworks)->
