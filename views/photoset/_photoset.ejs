@@ -10,6 +10,8 @@
         <img src="<%- photoset.user.avatarURL(150) %>" alt="" class="avatar">
     <% } %>
     <a href="" class="location right-item"><%- photoset.address %></a>
-    <a href="" class="artwork right-item">恋物語</a>
+    <% if (photoset.artwork){ %>
+        <a href="/a<%- photoset.artwork.id %>" class="artwork right-item"><%- photoset.artwork.name %></a>
+    <% } %>
     <div class="clearfix"></div>
 </div>

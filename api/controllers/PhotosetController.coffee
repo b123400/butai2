@@ -64,16 +64,34 @@ module.exports = {
       Q.Promise (resolve, reject)->
         Photoset.find().limit().done (err, photosets)->
           return reject err if err
-          fields = photosets
+
+          userFields = photosets
           .map (photoset)-> photoset.user_id
-          .filter (id, index, self)-> index is self.indexOf id #unique
+          .filter (id, index, self)-> id? and index is self.indexOf id #unique
           .map (id)-> {id}
 
-          User.find {'or':fields}, (err, users)->
-            return reject err if err
-            _users = {}
-            users.forEach (u)-> _users[u.id] = u
-            photosets.forEach (p)-> p.user = _users[p.user_id]
+          userPromise = Q.Promise (resolve, reject)->
+            User.find {'or':userFields}, (err, users)->
+              return reject err if err
+              _users = {}
+              users.forEach (u)-> _users[u.id] = u
+              photosets.forEach (p)-> p.user = _users[p.user_id]
+              resolve()
+
+          artworkFields = photosets
+          .map (photoset)-> photoset.artwork_id
+          .filter (id, index, self)-> id? and index is self.indexOf id #unique
+          .map (id)-> {id}
+
+          artworkPromise = Q.Promise (resolve, reject)->
+            Artwork.find {'or':artworkFields}, (err, artworks)->
+              return reject err if err
+              _artworks = {}
+              artworks.forEach (a)-> _artworks[a.id] = a
+              photosets.forEach (p)-> p.artwork = _artworks[p.artwork_id]
+              resolve()
+
+          Q.all([userPromise, artworkPromise]).then ->
             resolve photosets
 
     Q.all([
