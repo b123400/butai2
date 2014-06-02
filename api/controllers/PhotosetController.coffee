@@ -25,6 +25,7 @@ stream = require 'stream'
 util = require 'util'
 validator = require 'validator'
 Q = require 'q'
+async = require 'async'
 
 # class Forwarder extends stream.Transform
 #   _transform: (chunk, encoding, callback) ->
@@ -54,55 +55,45 @@ module.exports = {
   #   res.view 'photoset/index'
 
   index : (req, res)->
-    fetchArtwork =->
-      Q.Promise (resolve, reject)->
-        Artwork.find().limit().done (err, artworks)->
-          return reject err if err
-          resolve artworks
-
-    fetchPhotoset =->
-      Q.Promise (resolve, reject)->
+    async.parallel
+      artworks : (cb)-> Artwork.find().limit().done cb
+      photosets : (cb)->
         Photoset.find().limit().done (err, photosets)->
-          return reject err if err
+          return cb err if err
 
           userFields = photosets
-          .map (photoset)-> photoset.user_id
+          .map    (photoset)       -> photoset.user_id
           .filter (id, index, self)-> id? and index is self.indexOf id #unique
-          .map (id)-> {id}
-
-          userPromise = Q.Promise (resolve, reject)->
-            User.find {'or':userFields}, (err, users)->
-              return reject err if err
-              _users = {}
-              users.forEach (u)-> _users[u.id] = u
-              photosets.forEach (p)-> p.user = _users[p.user_id]
-              resolve()
+          .map    (id)             -> {id}
 
           artworkFields = photosets
-          .map (photoset)-> photoset.artwork_id
+          .map    (photoset)       -> photoset.artwork_id
           .filter (id, index, self)-> id? and index is self.indexOf id #unique
-          .map (id)-> {id}
+          .map    (id)             -> {id}
 
-          artworkPromise = Q.Promise (resolve, reject)->
-            Artwork.find {'or':artworkFields}, (err, artworks)->
-              return reject err if err
-              _artworks = {}
-              artworks.forEach (a)-> _artworks[a.id] = a
-              photosets.forEach (p)-> p.artwork = _artworks[p.artwork_id]
-              resolve()
+          async.parallel
+            users    : (cb)-> User.find {'or':userFields}, cb
+            artworks : (cb)-> Artwork.find {'or':artworkFields}, cb
+          , (err, results)->
+            return cb err if err
 
-          Q.all([userPromise, artworkPromise]).then ->
-            resolve photosets
+            _users = {}
+            results.users.forEach (u)-> _users[u.id] = u
+            photosets.forEach (p)-> p.user = _users[p.user_id]
+            
+            _artworks = {}
+            results.artworks.forEach (a)-> _artworks[a.id] = a
+            photosets.forEach (p)-> p.artwork = _artworks[p.artwork_id]
 
-    Q.all([
-      fetchArtwork()
-      fetchPhotoset()
-    ])
-    .spread (artworks, photosets)->
+            cb null, photosets
+    , (err, results)->
+      console.log err if err
       res.view 'photoset/index',
         sidebarPartial : 'photoset/indexSidebar'
-        sidebarContent : {artworks}
-        photosets : photosets
+        sidebarContent : {
+          artworks : results.artworks
+        }
+        photosets : results.photosets
 
   find : (req, res)->
     Photoset.findOne(req.param('id')).exec (err, photoset)->
