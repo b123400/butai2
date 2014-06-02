@@ -274,7 +274,7 @@ nav, .nav-background {
       font-size: 1.5em;
       margin: 0;
       text-align: left; }
-    .primary form input[type=text], .primary form input[type=password] {
+    .primary form input[type=text], .primary form input[type=password], .primary form input[type=email] {
       width: 100%;
       border-width: 0 0 1px 0;
       border-color: #7a7a7a;
@@ -283,7 +283,7 @@ nav, .nav-background {
       height: 40px;
       border-style: dotted;
       outline: none; }
-      .primary form input[type=text].error, .primary form input[type=password].error {
+      .primary form input[type=text].error, .primary form input[type=password].error, .primary form input[type=email].error {
         background: #ffc7c7; }
     .primary form input[type=submit] {
       background: #47dbc3;
