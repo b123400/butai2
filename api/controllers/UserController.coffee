@@ -55,9 +55,11 @@ module.exports = {
       user      : (cb)-> User.findOne {id: req.param 'id'}, cb
       photosets : (cb)-> Photoset.find {user_id: req.param 'id'}, cb
     , (err, results)->
-      console.log results
       results.photosets.forEach (p)-> p.user = results.user
 
       res.view 'photoset/index',
         photosets : results.photosets
+        sidebarPartial : 'user/findSidebar'
+        sidebarContent :
+          user : results.user
 }
