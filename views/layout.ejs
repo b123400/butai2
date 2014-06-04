@@ -21,7 +21,7 @@
         your `sails.config.appName` to show that you can inject data into layouts
         exactly the same way as with your other view templates.
     -->
-    <title><%- title %></title>
+    <title><%= title %></title>
     <!--
 
       Stylesheets
@@ -56,7 +56,7 @@
     <% } %>
 
     <!-- Include the view file for the current controller/route -->
-    <div class="primary <%- typeof extraClass == "undefined"? "" : extraClass %>">
+    <div class="primary <%= typeof extraClass == "undefined"? "" : extraClass %>">
       <%- body %>
     </div>
 

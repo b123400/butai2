@@ -2,14 +2,14 @@
         </script>
         
         <div class="photoset">
-            <img class="photo" src="<%- photoset.getImageURL('reality') %>" />
-            <img class="capture" src="<%- photoset.getImageURL('capture') %>" />
+            <img class="photo" src="<%= photoset.getImageURL('reality') %>" />
+            <img class="capture" src="<%= photoset.getImageURL('capture') %>" />
             <div class="clearfix"></div>
         </div>
         
         <% if( photoset.lat && photoset.lng ){ %>
             <div class="photoset-map">
-                <div class="map-canvas" data-map='{"lat":<%- photoset.lat %>, "lng":<%- photoset.lng %>}'></div>
+                <div class="map-canvas" data-map='{"lat":<%= photoset.lat %>, "lng":<%= photoset.lng %>}'></div>
             </div>
         <% } %>
 
