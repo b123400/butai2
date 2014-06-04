@@ -371,17 +371,27 @@ nav, .nav-background
       &.error
         background: rgba(255, 199, 199, 1)
 
-    input[type=submit]
-      background: #47DBC3
+    input[type=submit], input[type=button], .button
       border: 0
       color: white
       padding: 10px 40px
       border-radius: 5px
       outline: none
+      margin: 10px
+      margin-bottom: 30px
+      cursor: pointer
       &:hover
         background: #3CBBA6
       &[disabled]
         background: #999
+
+    input[type=submit]
+      background: #47DBC3
+
+    a.button.register
+      background: #FFC053
+      &:hover
+        background: #cd9a43
 
     input[type=file]
       opacity: 0

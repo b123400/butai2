@@ -285,17 +285,25 @@ nav, .nav-background {
       outline: none; }
       .primary form input[type=text].error, .primary form input[type=password].error, .primary form input[type=email].error {
         background: #ffc7c7; }
-    .primary form input[type=submit] {
-      background: #47dbc3;
+    .primary form input[type=submit], .primary form input[type=button], .primary form .button {
       border: 0;
       color: white;
       padding: 10px 40px;
       border-radius: 5px;
-      outline: none; }
-      .primary form input[type=submit]:hover {
+      outline: none;
+      margin: 10px;
+      margin-bottom: 30px;
+      cursor: pointer; }
+      .primary form input[type=submit]:hover, .primary form input[type=button]:hover, .primary form .button:hover {
         background: #3cbba6; }
-      .primary form input[type=submit][disabled] {
+      .primary form input[type=submit][disabled], .primary form input[type=button][disabled], .primary form .button[disabled] {
         background: #999999; }
+    .primary form input[type=submit] {
+      background: #47dbc3; }
+    .primary form a.button.register {
+      background: #ffc053; }
+      .primary form a.button.register:hover {
+        background: #cd9a43; }
     .primary form input[type=file] {
       opacity: 0;
       margin: 0;

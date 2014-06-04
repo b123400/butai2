@@ -15,6 +15,7 @@
  * @docs        :: http://sailsjs.org/#!documentation/controllers
 ###
 async = require 'async'
+validator = require 'validator'
 
 module.exports = {
     
@@ -28,33 +29,46 @@ module.exports = {
   _config: {}
 
   create : (req, res)->
-    if not req.param('username') or not req.param('password') or not req.param('email')
-      return res.view()
+    showError = (err)->
+      res.view 'user/create',
+        error : err
+        username : req.param 'username'
+        password : req.param 'password'
+        email : req.param 'email'
+
+    if not req.param('username')
+      return showError 'ユーザーネームがないです'
+    if not req.param('password')
+      return showError 'パスワードがないです'
+    if not req.param('email')
+      return showError 'Emailがないです'
+    if not validator.isEmail req.param 'email'
+      return showError 'Emailのフォマットが間違ってます'
 
     User.findOne {username : req.param 'username'}, (err, user)->
       return console.log err if err
 
       if user
-        return res.view '/user/create',
-          error : 'ユーザーネームが使われてます'
+        return showError 'ユーザーネームが使われてます'
 
       User.create
         username : req.param 'username'
         password : req.param 'password'
         email : req.param 'email'
       .done (err, user)->
-        if err
-          res.view '/user/create',
-            error : err
-          return
+        return showError JSON.stringify(err) if err
 
-        res.view 'user/thanks'
+        req.logIn user, (err)->
+          return showError err if err
+          res.view 'user/thanks'
 
   find : (req, res)->
     async.parallel
       user      : (cb)-> User.findOne {id: req.param 'id'}, cb
       photosets : (cb)-> Photoset.find {user_id: req.param 'id'}, cb
     , (err, results)->
+      return res.send 404 if err or results.length is 0
+
       results.photosets.forEach (p)-> p.user = results.user
 
       res.view 'photoset/index',

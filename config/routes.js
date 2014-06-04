@@ -39,9 +39,12 @@ module.exports.routes = {
   '/' : 'PhotosetController.index',
   '/map': 'MainController.map',
   '/add': 'PhotosetController.create',
+  
   '/ps:id' : 'PhotosetController.find',
   '/u:id' : 'UserController.find',
   '/a:id'  : 'Artwork.find',
+
+  '/register' : 'UserController.create',
   'get /login'  : 'AuthController.login',
   'post /login' : 'AuthController.process',
   '/logout'     : 'AuthController.logout'
