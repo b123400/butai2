@@ -72,8 +72,16 @@ module.exports = {
           .map    (id)             -> {id}
 
           async.parallel
-            users    : (cb)-> User.find {'or':userFields}, cb
-            artworks : (cb)-> Artwork.find {'or':artworkFields}, cb
+            users    : (cb)->
+              if not userFields.length
+                cb null, []
+              else
+                User.find {'or':userFields}, cb
+            artworks : (cb)->
+              if not artworkFields.length
+                cb null, []
+              else
+                Artwork.find {'or':artworkFields}, cb
           , (err, results)->
             return cb err if err
 
@@ -115,8 +123,28 @@ module.exports = {
 
   findWithLocation : (req, res)->
     Photoset.findWithinBounds req.param('max_lat'), req.param('min_lat'), req.param('max_lng'), req.param('min_lng'), (err, photosets)->
-      res.json err, 500 if err
-      res.json photosets
+      return res.json err, 500 if err
+
+      artworkFields = photosets
+      .map    (photoset)       -> photoset.artwork_id
+      .filter (id, index, self)-> id? and index is self.indexOf id #unique
+      .map    (id)             -> {id}
+
+      done =(err, artworks)->
+        return res.json err, 500 if err
+
+        _artworks = {}
+        artworks.forEach (a)-> _artworks[a.id] = a
+        photosets.forEach (p)->
+          p.artwork = _artworks[p.artwork_id]
+          p.captureURL = p.getImageURL 'capture'
+          p.realityURL = p.getImageURL 'reality'
+        res.json photosets
+
+      if not artworkFields.length
+        done null, []
+      else
+        Artwork.find {'or':artworkFields}, done
 
   create : (req, serverResponse)->
     if not req.param 'socket'

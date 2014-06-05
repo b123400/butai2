@@ -202,7 +202,14 @@ $('.map-canvas.browser').each (index, mapDiv)->
     allPhotosets.filter (p)-> bounds.contains new google.maps.LatLng p.lat, p.lng
 
   refreshSidebar =->
-    $('#test-output').html visiblePhotosets().map((p)-> p.id).join(',')
+    # $('#test-output').html visiblePhotosets().map((p)-> p.id).join(',')
+    divs = visiblePhotosets().map (photoset)->
+      $('<div>')
+      .addClass('map-photoset')
+      .css('background-image','url('+(photoset.realityURL || photoset.captureURL || "")+')')
+      .append( $('<p>').addClass('caption').html(photoset.artwork?.name) )
+    $('.map-photosets').empty().append divs
+
   initialize =->
     # todo fetch a random photoset
     mapOptions =
