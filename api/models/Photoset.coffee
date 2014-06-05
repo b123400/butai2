@@ -37,7 +37,6 @@ module.exports = {
   }
 
   findWithinBounds : (maxLat, minLat, maxLng, minLng, cb)->
-    console.log {maxLat, minLat, maxLng, minLng}
     @find
       lat : 
         '>=' : minLat

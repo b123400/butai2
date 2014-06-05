@@ -115,8 +115,8 @@ module.exports = {
 
   findWithLocation : (req, res)->
     Photoset.findWithinBounds req.param('max_lat'), req.param('min_lat'), req.param('max_lng'), req.param('min_lng'), (err, photosets)->
-      console.log arguments
-      res.json arguments
+      res.json err, 500 if err
+      res.json photosets
 
   create : (req, serverResponse)->
     if not req.param 'socket'

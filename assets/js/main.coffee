@@ -159,20 +159,59 @@ $('.map-canvas[data-map]').each (index, mapDiv)->
   google.maps.event.addDomListener(window, 'load', initialize);
 
 $('.map-canvas.browser').each (index, mapDiv)->
-  # getPointsAt = (lat,lng, cb)->
+  map = null
+  allPhotosets = []
+  
+  notAddedPhotosets = (photosets)->
+    allIds = allPhotosets.map (p)-> p.id
+    photosets.filter (p)-> p.id not in allIds
 
-  # showPins = (location)->
-  #   getPin location, (pins)->
-  #     map.
-  # map.on 'move', ->
-  #   showPins @location
+  addPhotosets = (photosets)->
+    photosets.forEach (p)-> allPhotosets.push p
+    return photosets
 
+  filterAndAddPhotosets = (photosets)->
+    addPhotosets notAddedPhotosets photosets
+
+  getPhotosetsAt = (max_lat, max_lng, min_lat, min_lng, cb)->
+    url = "/photoset/findWithLocation?max_lat="+max_lat+"&max_lng="+max_lng+"&min_lat="+min_lat+"&min_lng="+min_lng
+    $.get(url,"json").done (photosets)->
+      filterAndAddPhotosets(photosets).forEach (photoset)->
+        thisLatlng = new google.maps.LatLng photoset.lat , photoset.lng
+        marker = new google.maps.Marker
+          position: thisLatlng
+          map:map
+        console.log 'added', photoset.id, photoset.lat, photoset.lng
+        # marker.photoset = photoset
+        # map.markers.push marker
+      cb? photosets
+
+    # google.maps.event.trigger map, 'added_marker', marker
+
+  boundChanged =->
+    bound = map.getBounds()
+    return if not bound
+    northeast = bound.getNorthEast()
+    southwest = bound.getSouthWest()
+
+    getPhotosetsAt northeast.lat(), northeast.lng(), southwest.lat(), southwest.lng(), refreshSidebar
+    refreshSidebar()
+
+  visiblePhotosets =->
+    bounds = map.getBounds()
+    allPhotosets.filter (p)-> bounds.contains new google.maps.LatLng p.lat, p.lng
+
+  refreshSidebar =->
+    $('#test-output').html visiblePhotosets().map((p)-> p.id).join(',')
   initialize =->
+    # todo fetch a random photoset
     mapOptions =
-      center: new google.maps.LatLng(-34.397, 150.644)
-      zoom: 8
+      center: new google.maps.LatLng(36.35632878402529, 137.49508184814454)
+      zoom: 7
 
     map = new google.maps.Map mapDiv, mapOptions
+    google.maps.event.addListener map, 'bounds_changed', boundChanged
+
     $('mapDiv').data 'map', map
     window.map = map
   
