@@ -60,7 +60,7 @@ $('#create-photoset').on 'submit', (e)->
         reader.onprogress = (e)->
           # console.log 'progress', e
         reader.onload = (e)->
-          callback reader.result.replace(/^data:(.)*base64,/, "")
+          callback reader.result.replace(/^data:(.*)base64,/, "")
           defer.resolve()
         reader.readAsDataURL file.slice start, end
         return defer
@@ -75,7 +75,7 @@ $('#create-photoset').on 'submit', (e)->
           defer = defer.then ->
             console.log start, end
             readBlob start, end, (blobData)->
-              console.log blobData.length
+              console.log blobData.substring(0,40)
               socket.emit 'file', {which, data:blobData}
         start += chunkSize
       defer.done ->

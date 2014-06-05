@@ -40,6 +40,8 @@ async = require 'async'
 
 client = knox.createClient sails.config.aws
 
+currentUploads = {}
+
 module.exports = {
     
   
@@ -145,6 +147,9 @@ module.exports = {
         done null, []
       else
         Artwork.find {'or':artworkFields}, done
+
+  upload : (req, res)->
+    xx
 
   create : (req, serverResponse)->
     if not req.param 'socket'
