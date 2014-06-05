@@ -29,7 +29,7 @@ module.exports = {
   }
 
   getOrCreate : (name, cb)->
-    @findOne {name}, (err, artwork)->
+    @findOne {name}, (err, artwork)=>
       if err
         return cb? err
       if artwork

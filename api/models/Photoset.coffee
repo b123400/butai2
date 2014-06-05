@@ -35,4 +35,15 @@ module.exports = {
     getUser : (cb)->
       User.findOne({id: @user_id}).done(cb)
   }
+
+  findWithinBounds : (maxLat, minLat, maxLng, minLng, cb)->
+    console.log {maxLat, minLat, maxLng, minLng}
+    @find
+      lat : 
+        '>=' : minLat
+        '<=' : maxLat
+      lng :
+        '>=' : minLng
+        '<=' : maxLng
+    , cb
 }

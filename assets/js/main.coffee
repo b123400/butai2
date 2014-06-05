@@ -157,3 +157,23 @@ $('.map-canvas[data-map]').each (index, mapDiv)->
       map: map
 
   google.maps.event.addDomListener(window, 'load', initialize);
+
+$('.map-canvas.browser').each (index, mapDiv)->
+  # getPointsAt = (lat,lng, cb)->
+
+  # showPins = (location)->
+  #   getPin location, (pins)->
+  #     map.
+  # map.on 'move', ->
+  #   showPins @location
+
+  initialize =->
+    mapOptions =
+      center: new google.maps.LatLng(-34.397, 150.644)
+      zoom: 8
+
+    map = new google.maps.Map mapDiv, mapOptions
+    $('mapDiv').data 'map', map
+    window.map = map
+  
+  google.maps.event.addDomListener(window, 'load', initialize);
