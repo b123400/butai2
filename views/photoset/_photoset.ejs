@@ -1,10 +1,15 @@
-<a href="/ps<%= photoset.id %>">
 <div class="entry">
-    <div class="images">
-        <img class="photo" src="<%= photoset.getImageURL('reality') %>" width="367" />
-        <img class="capture" src="<%= photoset.getImageURL('capture') %>" width="367" />
-        <div class="clearfix"></div>
-    </div>
+    <a href="/ps<%= photoset.id %>">
+        <div class="images">
+            <% if( photoset.getImageURL('reality') && photoset.getImageURL('capture') ){ %>
+                <img class="photo" src="<%= photoset.getImageURL('reality') %>" width="367" />
+                <img class="capture" src="<%= photoset.getImageURL('capture') %>" width="367" />
+            <% } else { %>
+                <img class="single-image" src="<%= photoset.getImageURL('reality') || photoset.getImageURL('capture') %>" />
+            <% } %>
+            <div class="clearfix"></div>
+        </div>
+    </a>
     <div class="clearfix"></div>
     <% if (photoset.user) { %>
         <div class="speach-triangle"></div>
@@ -20,4 +25,3 @@
     <% } %>
     <div class="clearfix"></div>
 </div>
-</a>

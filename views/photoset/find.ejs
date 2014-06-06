@@ -2,8 +2,12 @@
         </script>
         
         <div class="photoset">
-            <img class="photo" src="<%= photoset.getImageURL('reality') %>" />
-            <img class="capture" src="<%= photoset.getImageURL('capture') %>" />
+            <% if( photoset.getImageURL('reality') && photoset.getImageURL('capture') ){ %>
+                <img class="photo" src="<%= photoset.getImageURL('reality') %>" />
+                <img class="capture" src="<%= photoset.getImageURL('capture') %>" />
+            <% }else{ %>
+                <img class="single-image" src="<%= photoset.getImageURL('reality') || photoset.getImageURL('capture') %>" />
+            <% } %>
             <div class="clearfix"></div>
         </div>
         

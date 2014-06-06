@@ -122,6 +122,9 @@ nav, .nav-background
           @media screen and (max-width: $break-small)
             margin-left: 0
 
+        &.single-image
+          width: 100%
+
     $triangle_width: 20px
     $triangle_height: 10px
     $avatar_left: 20px
@@ -257,18 +260,22 @@ nav, .nav-background
   
   .photoset
     width: 100%
-    height: 300px
 
     .photo
       width: 50%
-      height: 100%
-      background-color: #fbae00
+      // height: 100%
+      // background-color: #fbae00
       float: left
 
     .capture
       width: 50%
+      // height: 100%
+      // background-color: #d409b7
+      float: left
+
+    .single-image
+      width: 100%
       height: 100%
-      background-color: #d409b7
       float: left
 
   .photoset-map

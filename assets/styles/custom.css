@@ -94,6 +94,8 @@ nav, .nav-background {
         @media screen and (max-width: 480px) {
           .primary .entry .images img:nth-child(2) {
             margin-left: 0; } }
+      .primary .entry .images img.single-image {
+        width: 100%; }
     .primary .entry .speach-triangle {
       display: block;
       height: 10px;
@@ -192,17 +194,16 @@ nav, .nav-background {
         .primary .artworks div.artwork .caption.background--dark.background--complex {
           background-color: rgba(0, 0, 0, 0.4); }
   .primary .photoset {
-    width: 100%;
-    height: 300px; }
+    width: 100%; }
     .primary .photoset .photo {
       width: 50%;
-      height: 100%;
-      background-color: #fbae00;
       float: left; }
     .primary .photoset .capture {
       width: 50%;
+      float: left; }
+    .primary .photoset .single-image {
+      width: 100%;
       height: 100%;
-      background-color: #d409b7;
       float: left; }
   .primary .photoset-map {
     width: 100%;
