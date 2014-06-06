@@ -49,6 +49,7 @@ nav, .nav-background {
     height: 50px;
     float: right;
     margin: 3% 0 3% 6%;
+    cursor: pointer;
     background-size: 100%;
     background-size: cover;
     background-position: 50% 50%;

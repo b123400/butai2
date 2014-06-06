@@ -119,8 +119,8 @@ $('input[type=file]').on 'change', ->
 $('#create-photoset .map-canvas').each (index, mapDiv)->
   initialize =->
     mapOptions = 
-      center: new google.maps.LatLng(-34.397, 150.644),
-      zoom: 8
+      center: new google.maps.LatLng(36.35632878402529, 137.49508184814454),
+      zoom: 6
 
     map = new google.maps.Map(mapDiv,mapOptions)
 
@@ -182,6 +182,34 @@ $('.map-canvas.browser').each (index, mapDiv)->
           position: thisLatlng
           map:map
         console.log 'added', photoset.id, photoset.lat, photoset.lng
+
+        google.maps.event.addListener marker, 'click', ->
+          if map.infoWindow
+            map.infoWindow.close()
+            map.infoWindow = null
+
+          infoWindow = new google.maps.InfoWindow({
+            content : """
+              <a href='/ps#{photoset.id}'>
+              <div style='width:400px'>
+                <div style='width:200px;float:left;'>
+                  <img src='#{photoset.realityURL}' width="200">
+                </div>
+                #{ if photoset.capture then "
+                  <div style='width:200px;float:left;'>\
+                      <img src='#{photoset.captureURL}' width='200'>\
+                    </div>\
+                  " else ''
+                }
+                <div style='clear:both'></div>
+                <span>
+                  #{photoset.artwork?.name}
+                </span>
+              </a>
+            """
+          })
+          infoWindow.open map, marker
+          map.infoWindow = infoWindow
         # marker.photoset = photoset
         # map.markers.push marker
       cb? photosets
@@ -208,6 +236,7 @@ $('.map-canvas.browser').each (index, mapDiv)->
       .addClass('map-photoset')
       .css('background-image','url('+(photoset.realityURL || photoset.captureURL || "")+')')
       .append( $('<p>').addClass('caption').html(photoset.artwork?.name) )
+      .on 'click', -> location.href = '/ps'+photoset.id
     $('.map-photosets').empty().append divs
 
   initialize =->
