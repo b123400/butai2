@@ -148,9 +148,6 @@ module.exports = {
       else
         Artwork.find {'or':artworkFields}, done
 
-  upload : (req, res)->
-    xx
-
   create : (req, serverResponse)->
     if not req.param 'socket'
       return serverResponse.view 'photoset/create',
@@ -184,8 +181,8 @@ module.exports = {
 
     maxFilesize = 5*1024*1024 #5MB
 
-    realityFilename = uuid.v4() if req.param('reality')?
-    captureFilename = uuid.v4() if req.param('capture')?
+    realityFilename = uuid.v4() if req.param('reality') isnt ""
+    captureFilename = uuid.v4() if req.param('capture') isnt ""
 
     handleError = (which, err)->
       console.log err

@@ -101,8 +101,8 @@ $('#create-photoset').on 'submit', (e)->
     enableInput()
 
   submitForm
-    reality : $('input[type=file].reality')[0].files[0] || $('#create-photoset input.reality').val()
-    capture : $('input[type=file].capture')[0].files[0] || $('#create-photoset input.capture').val()
+    reality : $('input[type=file].reality')[0].files[0] || $('#create-photoset input.reality').val() || ""
+    capture : $('input[type=file].capture')[0].files[0] || $('#create-photoset input.capture').val() || ""
     url : $('input.url').val()
     lat : $('.map-canvas').data('location')?.lat?()
     lng : $('.map-canvas').data('location')?.lng?()
@@ -203,7 +203,7 @@ $('.map-canvas.browser').each (index, mapDiv)->
                 }
                 <div style='clear:both'></div>
                 <span>
-                  #{photoset.artwork?.name}
+                  #{photoset.artwork?.name || ""}
                 </span>
               </a>
             """

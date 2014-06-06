@@ -25,8 +25,10 @@ module.exports = {
     getImageURL : (which)->
       baseURL = "https://s3-ap-northeast-1.amazonaws.com/b123400test2/"
       if which is 'reality'
+        return null if not @reality
         baseURL + @reality
       else
+        return null if not @capture
         baseURL + @capture
 
     getArtwork : (cb)->
