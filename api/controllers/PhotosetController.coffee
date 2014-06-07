@@ -60,7 +60,7 @@ module.exports = {
     async.parallel
       artworks : (cb)-> Artwork.find().limit().done cb
       photosets : (cb)->
-        Photoset.find().limit().done (err, photosets)->
+        Photoset.find().limit().sort('id DESC').done (err, photosets)->
           return cb err if err
 
           userFields = photosets
@@ -150,6 +150,33 @@ module.exports = {
         Artwork.find {'or':artworkFields}, done
 
   create : (req, serverResponse)->
+    # fs = require 'fs'
+    # photosets = fs.readFileSync("/Users/b123400/Desktop/dump.json")
+    # photosets = JSON.parse photosets
+
+    # allArtworks = photosets
+    # .map (p)-> p.artwork
+    # .forEach (artwork)->
+    #   Artwork.create
+    #     name : artwork.name
+    #     id : artwork.id
+    #   , (err)->
+    #     console.log err if err
+
+    # photosets.forEach (p)->
+    #   Photoset.create
+    #     id : p.id
+    #     lat : p.latitude
+    #     lng : p.longitude
+    #     reality : p.photo.original.replace("http://s3-ap-northeast-1.amazonaws.com/butai/","")
+    #     capture : p.capture.original.replace("http://s3-ap-northeast-1.amazonaws.com/butai/","")
+    #     user_id : p.user.id
+    #     artwork_id : p.artwork.id
+    #     address : p.address
+    #   , (err)->
+    #     console.log err if err
+
+
     if not req.param 'socket'
       return serverResponse.view 'photoset/create',
         sidebarPartial : 'photoset/createSidebar'

@@ -32,12 +32,30 @@ module.exports = {
     p = Q.ninvoke Photoset, "find", { artwork_id: req.param 'id' }
     
     Q.all([a,p]).spread (artwork, photosets)->
-      res.view 'photoset/index', {
-        photosets
-        sidebarPartial : 'artwork/findSidebar'
-        sidebarContent :
-          {artwork}
-        }
+      userFields = photosets
+      .map    (photoset)       -> photoset.user_id
+      .filter (id, index, self)-> id? and index is self.indexOf id #unique
+      .map    (id)             -> {id}
+
+      async.parallel
+        users    : (cb)->
+          if not userFields.length
+            cb null, []
+          else
+            User.find({'or':userFields}).sort('id DESC').done cb
+      , (err, results)->
+        console.log err if err
+
+        _users = {}
+        results.users.forEach (u)-> _users[u.id] = u
+        photosets.forEach (p)-> p.user = _users[p.user_id]
+        
+        res.view 'photoset/index', {
+          photosets
+          sidebarPartial : 'artwork/findSidebar'
+          sidebarContent :
+            {artwork}
+          }
 
   index : (req, res)->
     Artwork.find().done (err, artworks)->

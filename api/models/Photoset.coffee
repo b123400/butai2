@@ -23,7 +23,7 @@ module.exports = {
     user_id : 'integer'
     
     getImageURL : (which)->
-      baseURL = "https://s3-ap-northeast-1.amazonaws.com/b123400test2/"
+      baseURL = "https://s3-ap-northeast-1.amazonaws.com/butai/"
       if which is 'reality'
         return null if not @reality
         baseURL + @reality
