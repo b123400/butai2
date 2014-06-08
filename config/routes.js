@@ -44,7 +44,8 @@ module.exports.routes = {
   '/u:id' : 'UserController.find',
   '/a:id'  : 'Artwork.find',
 
-  '/register' : 'UserController.create',
+  'get /register' : 'UserController.add',
+  'post /register' : 'UserController.create',
   'get /login'  : 'AuthController.login',
   'post /login' : 'AuthController.process',
   '/logout'     : 'AuthController.logout'

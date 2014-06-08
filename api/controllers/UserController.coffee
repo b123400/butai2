@@ -28,6 +28,9 @@ module.exports = {
   ###
   _config: {}
 
+  add : (req, res)->
+    res.view 'user/create'
+
   create : (req, res)->
     showError = (err)->
       res.view 'user/create',
@@ -76,4 +79,27 @@ module.exports = {
         sidebarPartial : 'user/findSidebar'
         sidebarContent :
           user : results.user
+
+  edit : (req, res)->
+    res.view 'user/edit'
+
+  update : (req, res)->
+    okToUpdate = (cb)->
+      return cb 'ログインしてない'              if not req.user?[0]?
+      return cb 'パスワードがないです'           if not req.param 'password'
+      return cb 'Emailがないです'              if not req.param 'email'
+      return cb 'Emailのフォマットが間違ってます' if not validator.isEmail req.param 'email'
+
+      req.user[0].validPassword req.param('password'), (err, result)->
+        return cb err if err
+        return cb 'パスワードが間違ってます' if not result
+        cb null, true
+
+    okToUpdate (err, result)->
+      return res.view 'user/edit', {error: err} if err
+      req.user[0].email = req.param 'email'
+      req.user[0].password = req.param 'new-password'
+      req.user[0].save (err)->
+        return res.view 'user/edit', {error: err} if err
+        res.view 'user/edit', {message:'okです'}
 }

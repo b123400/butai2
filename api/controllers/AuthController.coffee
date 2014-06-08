@@ -42,7 +42,7 @@ module.exports = {
 
       if not user
         res.view 'auth/login',
-          error : info
+          error : info?.message
         return
 
       req.logIn user, (err)->

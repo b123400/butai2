@@ -1,11 +1,13 @@
 <form method="post">
 	<p class="label">ユーザーネーム</p>
-	<input name="username" type="text" value="<%= username %>">
+	<input name="username" type="text" value="<%= typeof username != "undefined" ? username : "" %>">
 	<p class="label">メールアドレス</p>
-	<input name="email" type="text" value="<%= email %>">
+	<input name="email" type="text" value="<%= typeof email != "undefined" ? email : "" %>">
 	<p class="label">パスワード</p>
-	<input name="password" type="password" value="<%= password %>">
+	<input name="password" type="password" value="<%= typeof password != "undefined" ? password : "" %>">
 	<input type="submit" value="気合、入れて、行きます！">
-	<BR/>
-	<div class="error-message"><%= error %></div>
+	<% if (typeof error != "undefined") { %>
+		<BR/>
+		<div class="error-message"><%= error %></div>
+	<% } %>
 </form>

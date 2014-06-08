@@ -1,0 +1,14 @@
+<form method="post" action="/user/update">
+	<% if (typeof message != "undefined") { %>
+		<div><%= message %></div>
+	<% } %>
+
+	<p class="label">Email</p><input name="email" type="text" value="<%= req.user[0].email %>">
+	<p class="label">今のパスワード</p><input name="password" type="password">
+	<p class="label">新しいパスワード</p><input name="new-password" type="password">
+	<input type="submit" value="変更">
+	<% if (typeof error != "undefined"){ %>
+		<BR/>
+		<div class="error-message"><%= error %></div>
+	<% } %>
+</form>

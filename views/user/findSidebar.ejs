@@ -1,1 +1,4 @@
 <a href="/u<%= user.id %>">ユーザー：<%= user.username%></a>
+<% if( req.user && req.user[0] ){ %>
+    <a href="/user/edit">プロフィールを編集</a>
+<% } %>

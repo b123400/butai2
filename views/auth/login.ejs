@@ -1,5 +1,13 @@
 <form method="post" action="/login">
 	<p class="label">ユーザーネーム</p><input name="username" type="text">
 	<p class="label">パスワード</p><input name="password" type="password">
-	<input type="submit" value="ログイン"><a href="/register" class="button register">登録</a>
+	<input type="submit" value="ログイン">
+
+	<% if (typeof error != "undefined"){ %>
+		<BR/>
+		<div class="error-message"><%= error %></div>
+		<BR/>
+	<% } %>
+	<BR/>
+	<a href="/register" class="button register">登録</a>
 </form>
