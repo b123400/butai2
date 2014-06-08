@@ -28,8 +28,9 @@ nav, .nav-background {
   nav .logo-caption, .nav-background .logo-caption {
     color: #aaaaaa;
     margin: 0;
-    margin-bottom: 40px;
-    text-decoration: none; }
+    margin-bottom: 40px; }
+    nav .logo-caption:hover, .nav-background .logo-caption:hover {
+      text-decoration: none; }
   nav .bottom, .nav-background .bottom {
     position: absolute;
     bottom: 0;

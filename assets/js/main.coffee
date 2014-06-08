@@ -116,33 +116,50 @@ $('input[type=file]').on 'change', ->
     disabled : true
     placeholder : "選択した"
 
-$('#create-photoset .map-canvas').each (index, mapDiv)->
-  initialize =->
-    mapOptions = 
-      center: new google.maps.LatLng(36.35632878402529, 137.49508184814454),
-      zoom: 6
+do ->
+  $('input.reality[type=file]').on 'change', ->
+    reader = new FileReader
+    file = @files[0]
+    _this = @
+    reader.onload = (e)->
+      data = atob(@result.replace(/^.*?,/,''))
+      jpegFile = new JpegMeta.JpegFile data, file.name
+      lat = jpegFile.gps.latitude.value
+      lng = jpegFile.gps.longitude.value
+      $(_this).trigger 'gps', {lat,lng}
+    reader.readAsDataURL file
 
-    map = new google.maps.Map(mapDiv,mapOptions)
+  $('#create-photoset .map-canvas').each (index, mapDiv)->
+    initialize =->
+      mapOptions = 
+        center: new google.maps.LatLng(36.35632878402529, 137.49508184814454),
+        zoom: 6
 
-    thisMarker = undefined
-    placeMarker= (location) ->
-      if !thisMarker
-        thisMarker = new google.maps.Marker
-          position: location,
-          map: map
-      else
-        thisMarker.setPosition location
-      $(mapDiv).data 'location',location
-      geocoder = new google.maps.Geocoder
-      geocoder.geocode {'latLng':location}, (results, status) ->
-        $(mapDiv).data 'address', results[0]?.formatted_address
-    # panorama.setPosition location
-    # google.maps.event.trigger map, 'picked_location', location
+      map = new google.maps.Map(mapDiv,mapOptions)
 
-    google.maps.event.addListener map, 'rightclick', (event) ->
-      placeMarker event.latLng
-  
-  google.maps.event.addDomListener window, 'load', initialize
+      thisMarker = undefined
+      placeMarker= (location) ->
+        if !thisMarker
+          thisMarker = new google.maps.Marker
+            position: location,
+            map: map
+        else
+          thisMarker.setPosition location
+        $(mapDiv).data 'location',location
+        geocoder = new google.maps.Geocoder
+        geocoder.geocode {'latLng':location}, (results, status) ->
+          $(mapDiv).data 'address', results[0]?.formatted_address
+      # panorama.setPosition location
+      # google.maps.event.trigger map, 'picked_location', location
+
+      google.maps.event.addListener map, 'rightclick', (event) ->
+        placeMarker event.latLng
+      $('input.reality[type=file]').on 'gps', (e, location)->
+        location = new google.maps.LatLng(location.lat, location.lng)
+        placeMarker location
+        map.setCenter location
+    
+    google.maps.event.addDomListener window, 'load', initialize
 
 $('.map-canvas[data-map]').each (index, mapDiv)->
   mapData = $.parseJSON($(@).attr('data-map'))
