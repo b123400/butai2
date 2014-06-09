@@ -6,6 +6,8 @@
  * @docs        :: http://sailsjs.org/#!documentation/models
 ###
 
+sails = require 'sails'
+
 module.exports = {
 
   attributes: {
@@ -23,7 +25,7 @@ module.exports = {
     user_id : 'integer'
     
     getImageURL : (which)->
-      baseURL = "https://s3-ap-northeast-1.amazonaws.com/butai/"
+      baseURL = sails.config.aws.urlPrefix #"https://s3-ap-northeast-1.amazonaws.com/butai/"
       if which is 'reality'
         return null if not @reality
         baseURL + @reality
