@@ -48,7 +48,9 @@ module.exports.routes = {
   'post /register' : 'UserController.create',
   'get /login'  : 'AuthController.login',
   'post /login' : 'AuthController.process',
-  '/logout'     : 'AuthController.logout'
+  '/logout'     : 'AuthController.logout',
+
+  '/photoset/:id/delete' : 'PhotosetController.delete'
 
   /*
   // But what if you want your home page to display

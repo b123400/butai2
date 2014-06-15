@@ -7,6 +7,9 @@
 ###
 
 sails = require 'sails'
+async = require 'async'
+knox = require 'knox'
+client = knox.createClient sails.config.aws
 
 module.exports = {
 
@@ -38,6 +41,13 @@ module.exports = {
 
     getUser : (cb)->
       User.findOne({id: @user_id}).done(cb)
+
+    deleteFileAndDestroy : (cb)->
+      filesToDelete = [@reality, @capture].filter (e)-> e
+
+      client.deleteMultiple filesToDelete, (err)=>
+        return cb err if err
+        @destroy cb
   }
 
   findWithinBounds : (maxLat, minLat, maxLng, minLng, cb)->

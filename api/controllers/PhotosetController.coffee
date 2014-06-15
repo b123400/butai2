@@ -149,6 +149,15 @@ module.exports = {
       else
         Artwork.find {'or':artworkFields}, done
 
+  'delete' : (req, res)->
+    Photoset.findOne(req.param('id')).exec (err, photoset)->
+      if req.method.toLowerCase() isnt 'post'
+        return res.view 'photoset/delete', {photoset}
+
+      photoset.deleteFileAndDestroy (error)->
+        return res.view 'photoset/delete', {error} if err
+        res.view 'photoset/deleted'
+
   create : (req, serverResponse)->
     # fs = require 'fs'
     # photosets = fs.readFileSync("/Users/b123400/Desktop/dump.json")
