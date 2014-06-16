@@ -308,7 +308,8 @@ nav, .nav-background {
     .primary form input[type=submit] {
       background: #47dbc3; }
     .primary form a.button.register {
-      background: #ffc053; }
+      background: #ffc053;
+      text-decoration: none; }
       .primary form a.button.register:hover {
         background: #cd9a43; }
     .primary form input[type=file] {
@@ -370,6 +371,19 @@ nav, .nav-background {
     right: 0;
     z-index: 4;
     outline: none; }
+  .primary form.delete .yes, .primary form.delete .no {
+    border: 0;
+    color: white;
+    padding: 10px 40px;
+    border-radius: 5px;
+    outline: none;
+    margin: 10px;
+    margin-bottom: 30px;
+    cursor: pointer; }
+  .primary form.delete .yes {
+    background: #d52750; }
+  .primary form.delete .no {
+    background: #666666; }
 
 .clearfix {
   clear: both; }
