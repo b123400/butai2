@@ -33,12 +33,16 @@
             </div>
         </div>
 
-        <div class="suggestion">
-            <p class="caption">けいおん！の他の聖地</p>
-            <img src="http://s3-ap-northeast-1.amazonaws.com/butai/92/captures_medium.jpg?1380559008" alt="">
-        </div>
-        <div class="suggestion">
-            <p class="caption">近い聖地</p>
-            <img src="http://s3-ap-northeast-1.amazonaws.com/butai/92/captures_medium.jpg?1380559008" alt="">
-        </div>
+        <% if( photoset.artwork && related ){ %>
+            <div class="suggestion">
+                <p class="caption"><%= photoset.artwork.name %>の他の聖地</p>
+                <img src="<%= related.getImageURL('reality') || related.getImageURL('capture') %>" alt="">
+            </div>
+        <% } %>
+        <% if( nearby ){ %>
+            <div class="suggestion">
+                <p class="caption">近い聖地</p>
+                <img src="<%= nearby.getImageURL('reality') || nearby.getImageURL('capture') %>" alt="">
+            </div>
+        <% } %>
         <div class="clearfix"></div>

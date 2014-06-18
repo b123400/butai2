@@ -107,21 +107,31 @@ module.exports = {
 
   find : (req, res)->
     Photoset.findOne(req.param('id')).exec (err, photoset)->
+
       console.log err if err
       return res.send 404 if not photoset
 
-      userPromise = Q.ninvoke photoset, "getUser"
-      artworkPromise = Q.ninvoke photoset, "getArtwork"
-
-      Q.all([userPromise, artworkPromise]).done (result)->
-        photoset.user = result[0]
-        photoset.artwork = result[1]
+      async.parallel
+        user    : (cb)-> photoset.getUser cb
+        artwork : (cb)-> photoset.getArtwork cb
+        nearby  : (cb)-> photoset.getNearBy 1, cb
+        related : (cb)->
+          return cb null, null if not photoset.artwork_id
+          Photoset.findOne {
+            artwork_id: photoset.artwork_id
+            id : {'not': photoset.id}
+          }, cb
+      , (err, result)->
+        photoset.user = result.user
+        photoset.artwork = result.artwork
 
         res.view 'photoset/find',
           sidebarPartial : 'photoset/findSidebar'
           sidebarContent :
             photoset : photoset
           photoset : photoset
+          related : result.related
+          nearby : result.nearby?[0]
           error : err
 
   findWithLocation : (req, res)->

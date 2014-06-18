@@ -15,7 +15,7 @@
 	<a href="<%= photoset.url %>">引用元</a>
 <% } %>
 
-<% if( photoset.user && photoset.user.id == req.user[0].id ){ %>
+<% if( photoset.user && req.user && req.user[0] && photoset.user.id == req.user[0].id ){ %>
 	<a href="/photoset/<%= photoset.id %>/delete">削除</a>
 <% } %>
 <a href="">ブックマーク: 2</a>

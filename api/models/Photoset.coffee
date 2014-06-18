@@ -37,7 +37,7 @@ module.exports = {
         baseURL + @capture
 
     getArtwork : (cb)->
-      Artwork.findOne({id : @artwork_id}).done(cb)
+      Artwork.findOne({id : @artwork_id}).done cb
 
     getUser : (cb)->
       User.findOne({id: @user_id}).done(cb)
@@ -48,6 +48,23 @@ module.exports = {
       client.deleteMultiple filesToDelete, (err)=>
         return cb err if err
         @destroy cb
+
+    getNearBy : (count=1, cb)->
+      return cb? null, null if not @lat or not @lng
+      count = Number count
+      query = """SELECT POW(lat-#{@lat},2) + POW(lng-#{@lng},2) AS "d", id
+      FROM photoset 
+      WHERE lat IS NOT NULL AND id != #{@id}
+      ORDER BY d
+      LIMIT #{count};"""
+      Photoset.query query, (err, results)->
+        return cb err if err
+        ids = results.map (r)-> r.id
+        Photoset.find().where({id: ids}).exec (err, photosets)->
+          return cb err if err
+          photosets.sort (a, b)->
+            ids.indexOf(a)-ids.indexOf(b)
+          cb null, photosets
   }
 
   findWithinBounds : (maxLat, minLat, maxLng, minLng, cb)->
