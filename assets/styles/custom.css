@@ -371,6 +371,35 @@ nav, .nav-background {
     right: 0;
     z-index: 4;
     outline: none; }
+  .primary form .auto-complete input {
+    margin-bottom: 10px; }
+  .primary form .auto-complete .artwork-suggestion {
+    position: absolute;
+    width: 330px;
+    color: white;
+    overflow: visible;
+    z-index: 9;
+    margin: 0px 25px;
+    background: rgba(0, 0, 0, 0.8);
+    border-radius: 5px;
+    padding: 10px;
+    font-size: 15px;
+    display: none; }
+    .primary form .auto-complete .artwork-suggestion .suggestion-items {
+      max-height: 400px;
+      overflow: scroll; }
+  .primary form .auto-complete .artwork-suggestion:before {
+    content: "";
+    position: absolute;
+    background: transparent;
+    border-style: solid;
+    border-color: transparent transparent rgba(0, 0, 0, 0.8) transparent;
+    border-width: 10px;
+    top: -20px;
+    margin-left: -10px; }
+  .primary form .auto-complete .artwork-suggestion-item:hover {
+    cursor: pointer;
+    background-color: rgba(255, 255, 255, 0.2); }
   .primary form.delete .yes, .primary form.delete .no {
     border: 0;
     color: white;

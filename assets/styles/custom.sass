@@ -474,6 +474,41 @@ nav, .nav-background
       z-index: 4
       outline: none
 
+  form .auto-complete
+    input
+      margin-bottom: 10px
+
+    .artwork-suggestion
+      position: absolute
+      width: 330px
+      color: white
+      overflow: visible
+      z-index: 9
+      margin: 0px 25px
+      background: rgba(0, 0, 0, 0.8)
+      border-radius: 5px
+      padding: 10px
+      font-size: 15px
+      display: none
+
+      .suggestion-items
+        max-height: 400px
+        overflow: scroll
+
+    .artwork-suggestion:before
+      content: ""
+      position: absolute
+      background: transparent
+      border-style: solid
+      border-color: transparent transparent rgba(0,0,0,0.8) transparent
+      border-width: 10px
+      top: -20px
+      margin-left: -10px
+
+    .artwork-suggestion-item:hover
+      cursor: pointer
+      background-color: rgba(255,255,255,0.2)
+
   form.delete
     .yes, .no
       border: 0

@@ -161,6 +161,41 @@ do ->
     
     google.maps.event.addDomListener window, 'load', initialize
 
+$('#create-photoset .auto-complete').each (ele)->
+  input = $(@).children 'input'
+  suggestion = $(@).children '.artwork-suggestion'
+  suggestionList = suggestion.children '.suggestion-items'
+  input.on 'focus', =>
+    if refreshSuggestion()
+      suggestion.fadeIn()
+  input.on 'keypress input', =>
+    if refreshSuggestion()
+      suggestion.fadeIn()
+    else
+      suggestion.fadeOut()
+  input.on 'blur', =>
+    suggestion.fadeOut()
+
+  artworks = suggestion.data 'artworks'
+  refreshSuggestion =->
+    inputVal = input.val()
+    filteredArtwork = []
+    if inputVal is ""
+      filteredArtwork = artworks
+    else
+      filteredArtwork = artworks.filter (a)-> a.name.toLowerCase().indexOf( inputVal.toLowerCase() )>=0
+    suggestionList.empty()
+    if filteredArtwork.length is 0
+      return false
+    filteredArtwork.forEach (artwork)->
+      suggestionList.append $('<div>')
+      .addClass('artwork-suggestion-item')
+      .html(artwork.name)
+      .click ->
+        input.val artwork.name
+        suggestion.fadeOut()
+    return true
+
 $('.map-canvas[data-map]').each (index, mapDiv)->
   mapData = $.parseJSON($(@).attr('data-map'))
   initialize =->

@@ -187,8 +187,11 @@ module.exports = {
 
 
     if not req.param 'socket'
-      return serverResponse.view 'photoset/create',
-        sidebarPartial : 'photoset/createSidebar'
+      Artwork.find().limit().sort('id DESC').done (err, artworks)->
+        serverResponse.view 'photoset/create',
+          sidebarPartial : 'photoset/createSidebar',
+          artworks : artworks
+      return
 
     fileCount = 0
     fileCount++ if req.param('reality') isnt ""
