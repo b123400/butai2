@@ -168,6 +168,10 @@ module.exports = {
         return res.view 'photoset/delete', {error} if err
         res.view 'photoset/deleted'
 
+  edit : (req, res)->
+    Photoset.findOne(req.param('id')).exec (err, photoset)->
+      res.view 'photoset/edit'
+
   create : (req, serverResponse)->
     # fs = require 'fs'
     # photosets = fs.readFileSync("/Users/b123400/Desktop/dump.json")
