@@ -27,7 +27,7 @@ module.exports = {
     artwork_id : 'integer'
     user_id : 'integer'
     
-    getImageURL : (which, size)->
+    getImageURL : (which, width=0, height=0)->
       baseURL = sails.config.aws.urlPrefix #"http://s3-ap-northeast-1.amazonaws.com/butai/"
       url = undefined
       if which is 'reality'
@@ -37,10 +37,14 @@ module.exports = {
         return null if not @capture
         url = baseURL + @capture
 
-      if size
+      if width instanceof Object
+        height = width.height
+        width = width.width
+
+      if width? or size?
         url = url.replace 'http://', ''
-        sizeString = size.width+'x'+size.height
-        url = "http://frozen-wave-3754.herokuapp.com/unsafe/#{sizeString}/${url}"
+        sizeString = width+'x'+height
+        url = "http://media.but.ai/unsafe/#{sizeString}/#{url}"
       return url
 
     getArtwork : (cb)->

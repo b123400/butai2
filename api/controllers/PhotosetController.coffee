@@ -66,24 +66,22 @@ module.exports = {
           userFields = photosets
           .map    (photoset)       -> photoset.user_id
           .filter (id, index, self)-> id? and index is self.indexOf id #unique
-          .map    (id)             -> {id}
 
           artworkFields = photosets
           .map    (photoset)       -> photoset.artwork_id
           .filter (id, index, self)-> id? and index is self.indexOf id #unique
-          .map    (id)             -> {id}
 
           async.parallel
             users    : (cb)->
               if not userFields.length
                 cb null, []
               else
-                User.find {'or':userFields}, cb
+                User.find {id:userFields}, cb
             artworks : (cb)->
               if not artworkFields.length
                 cb null, []
               else
-                Artwork.find {'or':artworkFields}, cb
+                Artwork.find {id:artworkFields}, cb
           , (err, results)->
             return cb err if err
 
@@ -141,7 +139,6 @@ module.exports = {
       artworkFields = photosets
       .map    (photoset)       -> photoset.artwork_id
       .filter (id, index, self)-> id? and index is self.indexOf id #unique
-      .map    (id)             -> {id}
 
       done =(err, artworks)->
         return res.json err, 500 if err
@@ -157,7 +154,7 @@ module.exports = {
       if not artworkFields.length
         done null, []
       else
-        Artwork.find {'or':artworkFields}, done
+        Artwork.find {id:artworkFields}, done
 
   'delete' : (req, res)->
     Photoset.findOne(req.param('id')).exec (err, photoset)->
