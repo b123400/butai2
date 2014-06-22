@@ -3,10 +3,10 @@
         
         <div class="photoset">
             <% if( photoset.getImageURL('reality') && photoset.getImageURL('capture') ){ %>
-                <img class="photo" src="<%= photoset.getImageURL('reality') %>" />
-                <img class="capture" src="<%= photoset.getImageURL('capture') %>" />
+                <img class="photo" src="<%= photoset.getImageURL('reality', 500) %>" />
+                <img class="capture" src="<%= photoset.getImageURL('capture', 500) %>" />
             <% }else{ %>
-                <img class="single-image" src="<%= photoset.getImageURL('reality') || photoset.getImageURL('capture') %>" />
+                <img class="single-image" src="<%= photoset.getImageURL('reality', 1000) || photoset.getImageURL('capture', 1000) %>" />
             <% } %>
             <div class="clearfix"></div>
         </div>
@@ -17,7 +17,7 @@
             </div>
         <% } %>
 
-        <div class="comments">
+<!--         <div class="comments">
             <div class="comment">
                 <img src="http://www.gravatar.com/avatar/b6a007611d9373ab5159455635ff328e?d=mm&s=40" alt="" class="avatar">
                 <p class="body">いいですね</p>
@@ -31,7 +31,7 @@
                 cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non
                 proident, sunt in culpa qui officia deserunt mollit anim id est laborum.</p>
             </div>
-        </div>
+        </div> -->
 
         <% if( photoset.artwork && related ){ %>
             <div class="suggestion">

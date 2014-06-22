@@ -70,6 +70,8 @@ module.exports = {
       LIMIT #{count};"""
       Photoset.query query, (err, results)->
         return cb err if err
+        return cb null, [] if not results.length
+
         ids = results.map (r)-> r.id
         Photoset.find().where({id: ids}).exec (err, photosets)->
           return cb err if err
