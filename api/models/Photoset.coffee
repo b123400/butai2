@@ -8,6 +8,7 @@
 
 sails = require 'sails'
 async = require 'async'
+crypto = require 'crypto'
 knox = require 'knox'
 client = knox.createClient sails.config.aws
 
@@ -44,7 +45,13 @@ module.exports = {
       if width? or size?
         url = url.replace 'http://', ''
         sizeString = width+'x'+height
-        url = "http://media.but.ai/unsafe/#{sizeString}/#{url}"
+        urlToHash = "#{sizeString}/#{url}"
+        
+        hash = crypto.createHmac('sha1',sails.config.thumbor.key)
+          .update(urlToHash)
+          .digest('base64')
+
+        url = "http://media.but.ai/#{hash}/#{urlToHash}"
       return url
 
     getArtwork : (cb)->
