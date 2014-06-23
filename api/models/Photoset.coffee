@@ -46,10 +46,12 @@ module.exports = {
         url = url.replace 'http://', ''
         sizeString = width+'x'+height
         urlToHash = "#{sizeString}/#{url}"
-        
+
         hash = crypto.createHmac('sha1',sails.config.thumbor.key)
           .update(urlToHash)
           .digest('base64')
+          .replace(/\+/g, '-')
+          .replace(/\//g, '_')
 
         url = "http://media.but.ai/#{hash}/#{urlToHash}"
       return url

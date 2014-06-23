@@ -147,8 +147,8 @@ module.exports = {
         artworks.forEach (a)-> _artworks[a.id] = a
         photosets.forEach (p)->
           p.artwork = _artworks[p.artwork_id]
-          p.captureURL = p.getImageURL 'capture'
-          p.realityURL = p.getImageURL 'reality'
+          p.captureURL = p.getImageURL 'capture', 50, 50
+          p.realityURL = p.getImageURL 'reality', 50, 50
         res.json photosets
 
       if not artworkFields.length

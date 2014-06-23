@@ -3,10 +3,16 @@
         
         <div class="photoset">
             <% if( photoset.getImageURL('reality') && photoset.getImageURL('capture') ){ %>
-                <img class="photo" src="<%= photoset.getImageURL('reality', 500) %>" />
-                <img class="capture" src="<%= photoset.getImageURL('capture', 500) %>" />
+                <a href="<%= photoset.getImageURL('reality') %>">
+                    <img class="photo" src="<%= photoset.getImageURL('reality', 500) %>" />
+                </a>
+                <a href="<%= photoset.getImageURL('capture') %>">
+                    <img class="capture" src="<%= photoset.getImageURL('capture', 500) %>" />
+                </a>
             <% }else{ %>
-                <img class="single-image" src="<%= photoset.getImageURL('reality', 1000) || photoset.getImageURL('capture', 1000) %>" />
+                <a href="<%= photoset.getImageURL('reality') || photoset.getImageURL('capture') %>">
+                    <img class="single-image" src="<%= photoset.getImageURL('reality', 1000) || photoset.getImageURL('capture', 1000) %>" />
+                </a>
             <% } %>
             <div class="clearfix"></div>
         </div>
