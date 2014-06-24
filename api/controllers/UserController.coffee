@@ -70,7 +70,7 @@ module.exports = {
       user      : (cb)-> User.findOne {id: req.param 'id'}, cb
       photosets : (cb)-> Photoset.find {user_id: req.param 'id'}, cb
     , (err, results)->
-      return res.send 404 if err or results.length is 0
+      return res.send 404 if err or not results.user
 
       results.photosets.forEach (p)-> p.user = results.user
 
