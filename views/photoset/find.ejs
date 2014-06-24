@@ -40,15 +40,19 @@
         </div> -->
 
         <% if( photoset.artwork && related ){ %>
-            <div class="suggestion">
-                <p class="caption"><%= photoset.artwork.name %>の他の聖地</p>
-                <img src="<%= related.getImageURL('reality') || related.getImageURL('capture') %>" alt="">
-            </div>
+            <a href="/ps<%= related.id %>">
+                <div class="suggestion">
+                    <p class="caption"><%= photoset.artwork.name %>の他の聖地</p>
+                    <img src="<%= related.getImageURL('reality') || related.getImageURL('capture') %>" alt="">
+                </div>
+            </a>
         <% } %>
         <% if( nearby ){ %>
-            <div class="suggestion">
-                <p class="caption">近い聖地</p>
-                <img src="<%= nearby.getImageURL('reality') || nearby.getImageURL('capture') %>" alt="">
-            </div>
+            <a href="/ps<%= nearby.id %>">
+                <div class="suggestion">
+                    <p class="caption">近い聖地</p>
+                    <img src="<%= nearby.getImageURL('reality') || nearby.getImageURL('capture') %>" alt="">
+                </div>
+            </a>
         <% } %>
         <div class="clearfix"></div>
