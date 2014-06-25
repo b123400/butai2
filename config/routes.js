@@ -38,6 +38,7 @@ module.exports.routes = {
 
   '/' : 'PhotosetController.index',
   '/map': 'MainController.map',
+  '/map/:address': 'MainController.map',
   '/add': 'PhotosetController.create',
   
   '/ps:id' : 'PhotosetController.find',

@@ -18,7 +18,7 @@
         </a>
     <% } %>
     <% if (photoset.address) { %>
-        <a href="" class="location right-item"><%= photoset.address %></a>
+        <a href="/map/<%= photoset.address %>" class="location right-item"><%= photoset.address %></a>
     <% } %>
     <% if (photoset.artwork){ %>
         <a href="/a<%= photoset.artwork.id %>" class="artwork right-item"><%= photoset.artwork.name %></a>

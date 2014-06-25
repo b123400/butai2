@@ -291,6 +291,14 @@ $('.map-canvas.browser').each (index, mapDiv)->
       .on 'click', -> location.href = '/ps'+photoset.id
     $('.map-photosets').empty().append divs
 
+  loadAddress = (address, cb)->
+    geocoder = new google.maps.Geocoder()
+    geocoder.geocode {'address':address}, (results, status) ->
+      if status == google.maps.GeocoderStatus.OK
+        map.fitBounds results[0].geometry.bounds
+        map.setZoom 15
+        cb?()
+
   initialize =->
     # todo fetch a random photoset
     mapOptions =
@@ -300,7 +308,10 @@ $('.map-canvas.browser').each (index, mapDiv)->
     map = new google.maps.Map mapDiv, mapOptions
     google.maps.event.addListener map, 'bounds_changed', boundChanged
 
-    $('mapDiv').data 'map', map
+    $(mapDiv).data 'map', map
     window.map = map
+
+    if address = $(mapDiv).data 'address'
+      loadAddress address
   
   google.maps.event.addDomListener(window, 'load', initialize);

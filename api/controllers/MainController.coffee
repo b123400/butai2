@@ -29,5 +29,6 @@ module.exports = {
   map : (req, res)->
     res.view 'main/map',
       extraClass : 'map'
-      sidebarPartial : 'main/mapSidebar'  
+      sidebarPartial : 'main/mapSidebar'
+      address : req.param 'address'
 }
