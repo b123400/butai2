@@ -28,21 +28,26 @@ module.exports = {
   _config: {}
 
   find : (req, res)->
-    a = Q.ninvoke Artwork, "findOne", { id: req.param 'id' }
-    p = Q.ninvoke Photoset, "find", { artwork_id: req.param 'id' }
-    
-    Q.all([a,p]).spread (artwork, photosets)->
+    # a = Q.ninvoke Artwork, "findOne", { id: req.param 'id' }
+    # p = Q.ninvoke Photoset, "find", { artwork_id: req.param 'id' }
+
+    async.parallel
+      artwork : (cb)-> Artwork.findOne { id: req.param 'id' }, cb
+      photosets : (cb)-> Photoset.find({ artwork_id: req.param 'id' }).limit(10).skip(req.param('p')*10||0).exec(cb)
+    , (err, results)->
+      artwork = results.artwork
+      photosets = results.photosets
+
       userFields = photosets
       .map    (photoset)       -> photoset.user_id
       .filter (id, index, self)-> id? and index is self.indexOf id #unique
-      .map    (id)             -> {id}
 
       async.parallel
         users    : (cb)->
           if not userFields.length
             cb null, []
           else
-            User.find({'or':userFields}).sort('id DESC').done cb
+            User.find({id: userFields}).sort('id DESC').done cb
       , (err, results)->
         console.log err if err
 

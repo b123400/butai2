@@ -60,7 +60,7 @@ module.exports = {
     async.parallel
       artworks : (cb)-> Artwork.find().limit().done cb
       photosets : (cb)->
-        Photoset.find().limit().sort('id DESC').done (err, photosets)->
+        Photoset.find().limit(10).skip(req.param('p')*10||0).sort('id DESC').done (err, photosets)->
           return cb err if err
 
           userFields = photosets

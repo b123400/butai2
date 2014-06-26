@@ -68,7 +68,7 @@ module.exports = {
   find : (req, res)->
     async.parallel
       user      : (cb)-> User.findOne {id: req.param 'id'}, cb
-      photosets : (cb)-> Photoset.find {user_id: req.param 'id'}, cb
+      photosets : (cb)-> Photoset.find({user_id: req.param 'id'}).limit(10).skip(req.param('p')*10||0).exec(cb)
     , (err, results)->
       return res.send 404 if err or not results.user
 
