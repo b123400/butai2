@@ -1,3 +1,13 @@
 <% photosets.forEach(function(photoset){ %>
     <%- partial('photoset',{photoset:photoset}) %>
 <% }) %>
+<div class="paging">
+	<% var page = req.param('p')? Number(req.param('p')) : 0;
+	   if( page > 0 ){
+	%>
+		<a href="<%= req.path %>?p=<%= page-1 %>" class="prev">前のページ</a>
+	<% } %>
+	<% if( photosets.length>=10 ){ %>
+		<a href="<%= req.path %>?p=<%= page+1 %>" class="next">次のページ</a>
+	<% } %>
+</div>

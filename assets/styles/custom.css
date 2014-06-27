@@ -85,6 +85,19 @@ nav, .nav-background {
   .primary.full-width {
     max-width: none;
     margin-left: 0; }
+  .primary .paging {
+    text-align: center;
+    margin-bottom: 30px; }
+    .primary .paging a {
+      text-decoration: none;
+      color: #22afbb;
+      border: solid 1px #22afbb;
+      padding: 10px 20px;
+      border-radius: 20px; }
+    .primary .paging a.prev {
+      border-radius: 20px 0 0 20px; }
+    .primary .paging a.next {
+      border-radius: 0 20px 20px 0; }
   .primary .entry {
     margin-bottom: 40px;
     width: 100%; }
