@@ -1,4 +1,8 @@
   <script type="text/javascript"
     src="https://maps.googleapis.com/maps/api/js?key=AIzaSyAh0z9PrtdXhd84WvhdTMcbRd_krXYZPLM&sensor=false&language=ja">
   </script>
-  <div class="map-canvas browser" data-address="<%= address %>"></div>
+  <% if( typeof address != "undefined" ){ %>
+    <div class="map-canvas browser" data-address="<%= address %>"></div>
+  <% } else { %>
+      <div class="map-canvas browser"></div>
+  <% } %>
