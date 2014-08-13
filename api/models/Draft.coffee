@@ -9,11 +9,16 @@
 module.exports = {
 
   attributes: {
+
+    reality : 'string'
+    capture : 'string'
+    url     : 'url'
+    address : 'string'
     lat : 'float'
     lng : 'float'
-    capture : 'string'
-    url : 'string'
-    user_id : 'string'
+    artwork_id : 'integer'
+    user_id : 'integer'
+    
   }
 
 }

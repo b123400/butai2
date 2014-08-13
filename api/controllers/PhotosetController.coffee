@@ -26,6 +26,7 @@ util = require 'util'
 validator = require 'validator'
 Q = require 'q'
 async = require 'async'
+ImageUploader = require './ImageUploader'
 
 # class Forwarder extends stream.Transform
 #   _transform: (chunk, encoding, callback) ->
@@ -57,6 +58,7 @@ module.exports = {
   #   res.view 'photoset/index'
 
   index : (req, res)->
+    console.log ImageUploader
     async.parallel
       artworks : (cb)-> Artwork.find().limit().done cb
       photosets : (cb)->
@@ -223,12 +225,12 @@ module.exports = {
       message: 'hello'
 
     finished = 0
-    allowedContentType =
-      'image/gif'  : 'gif'
-      'image/jpg'  : 'jpg'
-      'image/jpeg' : 'jpg'
-      'image/pjpeg': 'jpg'
-      'image/png'  : 'png'
+    # allowedContentType =
+    #   'image/gif'  : 'gif'
+    #   'image/jpg'  : 'jpg'
+    #   'image/jpeg' : 'jpg'
+    #   'image/pjpeg': 'jpg'
+    #   'image/png'  : 'png'
 
     maxFilesize = 5*1024*1024 #5MB
 
