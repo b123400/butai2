@@ -2,8 +2,8 @@
     <a href="/ps<%= photoset.id %>">
         <div class="images">
             <% if( photoset.getImageURL('reality') && photoset.getImageURL('capture') ){ %>
-                <img class="photo" src="<%= photoset.getImageURL('reality', 367) %>" width="367" />
-                <img class="capture" src="<%= photoset.getImageURL('capture', 367) %>" width="367" />
+                <img class="photo" src="<%= photoset.getImageURL('reality', 500, 282) %>"/>
+                <img class="capture" src="<%= photoset.getImageURL('capture', 500, 282) %>"/>
             <% } else { %>
                 <img class="single-image" src="<%= photoset.getImageURL('reality') || photoset.getImageURL('capture') %>" />
             <% } %>
