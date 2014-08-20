@@ -2,7 +2,7 @@
  * DraftController
  *
  * @module      :: Controller
- * @description	:: A set of functions called `actions`.
+ * @description :: A set of functions called `actions`.
  *
  *                 Actions contain code telling Sails how to respond to a certain type of request.
  *                 (i.e. do stuff, then send some JSON, show an HTML page, or redirect to another URL)
@@ -14,9 +14,10 @@
  *
  * @docs        :: http://sailsjs.org/#!documentation/controllers
 ###
+ImageUploader = require './ImageUploader'
 
 module.exports = {
-    
+  
   
 
 
@@ -26,6 +27,20 @@ module.exports = {
   ###
   _config: {}
 
-  create : (req, res)->
-  	res.view ''
+  create : (req, serverResponse)->
+
+    if not req.param 'socket'
+      Artwork.find().limit().sort('id DESC').done (err, artworks)->
+        serverResponse.view 'draft/create',
+          sidebarPartial : 'draft/createSidebar',
+          artworks : artworks
+      return
+
+    val = req.param 'image'
+    if val is "file"
+      uploader = new ImageUploader.WebsocketImageUploader
+      thatDefer = uploader.uploadWithSocket req.socket, which, req.param("file-type"), req.param("file-size")
+    else if val isnt ""
+      uploader = new ImageUploader.URLImageUploader
+      thatDefer = uploader.uploadWithURL val
 }
