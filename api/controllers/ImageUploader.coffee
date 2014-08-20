@@ -1,61 +1,95 @@
 knox = require 'knox'
 sails = require 'sails'
-client = knox.createClient sails.config.aws
 events = require 'events'
+Q = require 'q'
+uuid = require 'node-uuid'
+stream = require 'stream'
+Url = require 'url'
+Request = require 'request'
 
-class ImageUploader extends events.EventEmitter
-  allowedContentType =
+client = knox.createClient sails.config.aws
+
+class ImageUploader
+  allowedContentType:
     'image/gif'  : 'gif'
     'image/jpg'  : 'jpg'
     'image/jpeg' : 'jpg'
     'image/pjpeg': 'jpg'
     'image/png'  : 'png'
 
+  maxFilesize : 5*1024*1024 #5MB
+
   upload : (stream)->
+    return Q.reject 'Wrong format' if not @allowedContentType[stream.headers['content-type']]
+    return Q.reject 'Too large, max 5MB' if stream.headers['content-length'] > @maxFilesize
+
     headers =
       'Content-Length': stream.headers['content-length']
       'Content-Type': stream.headers['content-type']
       'x-amz-acl': 'public-read'
 
-    extension = allowedContentType[stream.headers['content-type']]
+    extension = @allowedContentType[stream.headers['content-type']]
     if not extension
-      @emit 'error', 'Wrong content-type: '+stream['content-type']
-      return
+      return Q.reject 'Wrong content-type: '+stream['content-type']
 
-    thisFilename = __filename__ += '.'+extension
+    thisFilename = uuid.v4() + '.'+extension
 
-    client.putStream(stream, thisFilename, headers, @handleUploadResult)
+    deferred = Q.defer()
+
+    client.putStream(stream, thisFilename, headers, (err, res)->
+      # console.log 'finish', arguments
+      return deferred.reject err if err
+      deferred.resolve thisFilename
+    )
     .on 'progress', (result)=>
       # console.log result
-      @emit 'progress', result
-      # req.socket.emit 'progress', {percent: result.percent, which}
+      deferred.notify result.percent
     .on 'error', (e)=>
-      @emit 'error', e
-      console.log e
-      throw e
+      deferred.reject e
 
-  handleUploadResult : (err, res)->
-    return @emit 'error', err if err
-    console.log res
+    return deferred.promise
 
 class WebsocketImageUploader extends ImageUploader
   uploadWithSocket : (socket, identifier, type, fileSize)->
     customStream = stream.PassThrough();
+
     customStream.headers =
       'content-type' : type
       'content-length' : fileSize
+
     socket.on 'file', (file)->
       return if file.which isnt identifier
-      file.data = new Buffer(file.data,'base64');
-      console.log 'write', file.data.length
+      file.data = new Buffer( file.data,'base64' )
+      # console.log 'write', file.data.length
       customStream.write file.data
+
     socket.on 'file-done', (data)->
-      console.log 'end', data, identifier
-      return if data.which isnt which
+      # console.log 'end', data, identifier
+      return if data.which isnt identifier
       customStream.end()
     @upload customStream
 
+class URLImageUploader extends ImageUploader
+  uploadWithURL : (url)->
+    urlDetails = Url.parse url
+    # console.log urlDetails
+    return Q.reject ' Protocol Wrong, accept http/https only' if urlDetails.protocol not in ['http:','https:']
+
+    deferred = Q.defer()
+
+    imageRequest = Request url
+    imageRequest.on 'response', (res)=>
+      @upload(res)
+      .progress deferred.notify
+      .done deferred.resolve
+
+    imageRequest.on 'error', (err)->
+      deferred.reject err if err
+
+    return deferred.promise
+
 module.exports = {
-  ImageUploader,
-  WebsocketImageUploader
+  Uploader : ImageUploader,
+  WebsocketImageUploader,
+  URLImageUploader
 }
