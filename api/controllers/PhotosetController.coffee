@@ -16,16 +16,12 @@
 ###
 
 http = require 'http'
-knox = require 'knox'
-sails = require 'sails'
 Url = require 'url'
-uuid = require 'node-uuid'
-Request = require 'request'
-stream = require 'stream'
 util = require 'util'
 validator = require 'validator'
 Q = require 'q'
 async = require 'async'
+ImageUploader = require './ImageUploader'
 
 # class Forwarder extends stream.Transform
 #   _transform: (chunk, encoding, callback) ->
@@ -37,8 +33,6 @@ async = require 'async'
 #     @emit 'data', chunk
 #   end: ->
 #     @emit 'end'
-
-client = knox.createClient sails.config.aws
 
 currentUploads = {}
 
@@ -204,15 +198,13 @@ module.exports = {
           artworks : artworks
       return
 
-    fileCount = 0
-    fileCount++ if req.param('reality') isnt ""
-    fileCount++ if req.param('capture') isnt ""
-
-    isUrl = validator.isURL req.param 'url'
-    if fileCount is 0
+    if req.param('reality') is "" and req.param('capture') is ""
       return serverResponse.json
         success : false
         message : 'No file'
+
+    isUrl = validator.isURL req.param 'url'
+      
     if not isUrl and req.param 'url' isnt ""
       return serverResponse.json
         success : false
@@ -222,80 +214,26 @@ module.exports = {
       success: true
       message: 'hello'
 
-    finished = 0
-    allowedContentType =
-      'image/gif'  : 'gif'
-      'image/jpg'  : 'jpg'
-      'image/jpeg' : 'jpg'
-      'image/pjpeg': 'jpg'
-      'image/png'  : 'png'
-
-    maxFilesize = 5*1024*1024 #5MB
-
-    realityFilename = uuid.v4() if req.param('reality') isnt ""
-    captureFilename = uuid.v4() if req.param('capture') isnt ""
-
-    handleError = (which, err)->
-      console.log err
-      setTimeout ->
-        req.socket.emit 'fail', {which, message:err}
-
-    fetchImage = (which, imageURL)->
-      urlDetails = Url.parse imageURL
-      console.log urlDetails
-      return handleError which, 'Protocol Wrong, accept http/https only' if urlDetails.protocol not in ['http:','https:']
-
-      imageRequest = Request imageURL
-
-      imageRequest.on 'response', (res)->
-        uploadToS3 which, res
-
-      imageRequest.on 'error', (err)->
-        handleError 'Cannot fetch: '+err
-
-    uploadToS3 = (which, stream)->
-      return handleError which, 'Wrong format' if not allowedContentType[stream.headers['content-type']]
-      return handleError which, 'Too large, max 5MB' if stream.headers['content-length'] > maxFilesize
-      headers =
-        'Content-Length': stream.headers['content-length']
-        'Content-Type': stream.headers['content-type']
-        'x-amz-acl': 'public-read'
-
-      extension = allowedContentType[stream.headers['content-type']]
-      thisFilename = ""
-      if which is 'reality'
-        thisFilename = realityFilename += '.'+extension
-      else
-        thisFilename = captureFilename += '.'+extension
-
-      client.putStream(stream, thisFilename, headers, handleUploadResult.bind(null,which))
-      .on 'progress', (result)->
-        # console.log result
-        req.socket.emit 'progress', {percent: result.percent, which}
-      .on 'error', (e)->
-        console.log e
-        throw e
-
-    handleUploadResult = (which, err, res)->
-      return handleError which, 'Upload error: '+err if err
-      finished++
-      return if finished isnt fileCount #all finished
-
+    getOrCreateArtwork = (name)->
       #find artwork
-      if not req.param('artwork') or req.param('artwork') is ""
-        return createPhotoset()
 
-      Artwork.getOrCreate req.param('artwork'), (err, artwork)->
+      if not name or name is ""
+        return Q.resolve()
+
+      deferred = Q.defer()
+      Artwork.getOrCreate name, (err, artwork)->
         if err
-          createPhotoset()
+          deferred.resolve()
         else
-          createPhotoset artwork
+          deferred.resolve artwork
 
-    createPhotoset = (artwork)->
+      return deferred.promise
+
+    createPhotoset = (capture, reality, artwork)->
       Photoset.create
-        reality : realityFilename
-        capture : captureFilename
-        url     : if validator.isURL req.param 'url' then req.param 'url' else null
+        reality : reality
+        capture : capture
+        url     : req.param 'url'
         address : req.param 'address'
         lat     : req.param 'lat'
         lng     : req.param 'lng'
@@ -308,26 +246,39 @@ module.exports = {
           return
         req.socket.emit 'done', photoset.id
 
-    processParam =(which)->
+    processParam = (which)->
+      deferred = Q.defer()
+      thatDefer = null
       val = req.param which
-      if val is "file"
-        customStream = stream.PassThrough();
-        customStream.headers =
-          'content-type' : req.param "#{which}-file-type"
-          'content-length' : req.param "#{which}-file-size"
-        req.socket.on 'file', (file)->
-          return if file.which isnt which
-          file.data = new Buffer(file.data,'base64');
-          console.log 'write', file.data.length
-          customStream.write file.data
-        req.socket.on 'file-done', (data)->
-          console.log 'end', data, which
-          return if data.which isnt which
-          customStream.end()
-        uploadToS3 which, customStream
-      else if val isnt ""
-        fetchImage which, val
 
-    processParam 'reality'
-    processParam 'capture'
+      if val is "file"
+        uploader = new ImageUploader.WebsocketImageUploader
+        thatDefer = uploader.uploadWithSocket req.socket, which, req.param("#{which}-file-type"), req.param("#{which}-file-size")
+      else if val isnt ""
+        uploader = new ImageUploader.URLImageUploader
+        thatDefer = uploader.uploadWithURL val
+      else
+        return Q.resolve()
+
+      thatDefer.then deferred.resolve, ((message)-> deferred.reject {which, message}), deferred.notify
+
+      return deferred.promise
+
+    Q.all([
+      processParam('capture'),
+      processParam('reality'),
+      getOrCreateArtwork req.param 'artwork'
+    ])
+    .then (results)->
+      createPhotoset results[0], results[1], results[2]
+    
+    , (reason)->
+      console.log 'error', reason
+      setTimeout ->
+        req.socket.emit 'fail', reason
+    
+    , (result)->
+      which  = if result.index is 0 then 'capture' else 'reality'
+      req.socket.emit 'progress', {percent : result.value, which}
+      
 }

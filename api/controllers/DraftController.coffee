@@ -26,5 +26,6 @@ module.exports = {
   ###
   _config: {}
 
-  
+  create : (req, res)->
+  	res.view ''
 }
