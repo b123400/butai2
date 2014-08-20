@@ -42,10 +42,15 @@ $('#create-photoset').on 'submit', (e)->
 
     console.log startData
 
+    shouldStopUpload = false
+    stopUpload =-> shouldStopUpload = true
+
     socket.get '/photoset/create', startData, (result)->
       if result.success
         socket.on 'progress', updateProgress
-        socket.on 'fail', handleFail
+        socket.on 'fail', (err)->
+          handleFail err
+          stopUpload()
         socket.once 'done', (id)->
           location.href = '/photoset/find/'+id
       else
@@ -74,6 +79,7 @@ $('#create-photoset').on 'submit', (e)->
         do (start,end)->
           defer = defer.then ->
             console.log start, end
+            return $.Deferred().reject() if shouldStopUpload
             readBlob start, end, (blobData)->
               console.log blobData.substring(0,40)
               socket.emit 'file', {which, data:blobData}
@@ -94,10 +100,10 @@ $('#create-photoset').on 'submit', (e)->
   handleFail = (err)->
     if err.which is "reality"
       $('form input.reality').addClass 'error'
-      $('form input.reality').siblings('.error-message').fadeIn().html err.message
+      $('form input.reality').siblings('.error-message').fadeIn(-> $(@).css('display','inline-block')).html err.message
     else if err.which is "capture"
       $('form input.capture').addClass 'error'
-      $('form input.capture').siblings('.error-message').fadeIn().html err.message
+      $('form input.capture').siblings('.error-message').fadeIn(-> $(@).css('display','inline-block')).html err.message
     enableInput()
 
   submitForm
