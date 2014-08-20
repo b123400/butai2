@@ -301,8 +301,11 @@ $('.map-canvas.browser').each (index, mapDiv)->
     geocoder = new google.maps.Geocoder()
     geocoder.geocode {'address':address}, (results, status) ->
       if status == google.maps.GeocoderStatus.OK
-        map.fitBounds results[0].geometry.bounds
-        map.setZoom 15
+        if results[0].geometry.bounds
+          map.fitBounds results[0].geometry.bounds
+        else if results[0].geometry.location
+          map.setCenter results[0].geometry.location
+          map.setZoom 15
         cb?()
 
   initialize =->
