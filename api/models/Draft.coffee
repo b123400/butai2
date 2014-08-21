@@ -10,7 +10,6 @@ module.exports = {
 
   attributes: {
 
-    reality : 'string'
     capture : 'string'
     url     : 'url'
     address : 'string'

@@ -273,11 +273,13 @@ module.exports = {
     .then (results)->
       createPhotoset results[0], results[1], results[2]
     
+    # fail
     , (reason)->
       console.log 'error', reason
       setTimeout ->
         req.socket.emit 'fail', reason
-    
+        
+    # progress
     , (result)->
       which  = if result.index is 0 then 'capture' else 'reality'
       req.socket.emit 'progress', {percent : result.value, which}

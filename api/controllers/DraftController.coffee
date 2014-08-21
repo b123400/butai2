@@ -15,6 +15,8 @@
  * @docs        :: http://sailsjs.org/#!documentation/controllers
 ###
 ImageUploader = require './ImageUploader'
+validator = require 'validator'
+Q = require 'q'
 
 module.exports = {
   
@@ -36,11 +38,53 @@ module.exports = {
           artworks : artworks
       return
 
+    handleError = (reason)->
+      req.socket.emit 'fail', reason
+
+    if req.param('url')? && not validator.isURL req.param 'url'
+      return handleError 'Not a URL'
+
     val = req.param 'image'
+    uploadDefer = null
+
     if val is "file"
       uploader = new ImageUploader.WebsocketImageUploader
-      thatDefer = uploader.uploadWithSocket req.socket, which, req.param("file-type"), req.param("file-size")
-    else if val isnt ""
+      uploadDefer = uploader.uploadWithSocket req.socket, which, req.param("file-type"), req.param("file-size")
+    else if validator.isURL val
       uploader = new ImageUploader.URLImageUploader
-      thatDefer = uploader.uploadWithURL val
+      uploadDefer = uploader.uploadWithURL val
+
+    getOrCreateArtwork = (name)->
+      #find artwork
+      if not name or name is ""
+        return Q.resolve()
+
+      deferred = Q.defer()
+      Artwork.getOrCreate name, (err, artwork)->
+        if err
+          deferred.resolve()
+        else
+          deferred.resolve artwork
+      return deferred.promise
+
+    Q.all([
+      uploadDefer,
+      getOrCreateArtwork req.param 'artwork'
+    ])
+    .spread (filename, artwork)->
+      console.log arguments
+      Draft.create
+        capture : filename
+        url     : req.param 'url'
+        address : req.param 'address'
+        lat     : req.param 'lat'
+        lng     : req.param 'lng'
+        artwork_id : artwork?.id
+        user_id : req.user?[0]?.id
+      .done (err, draft)->
+        if err
+          console.log err
+          handleError err
+          return
+        req.socket.emit 'done', draft.id
 }
