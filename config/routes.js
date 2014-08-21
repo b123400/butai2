@@ -44,6 +44,7 @@ module.exports.routes = {
   '/ps:id' : 'PhotosetController.find',
   '/u:id' : 'UserController.find',
   '/a:id'  : 'Artwork.find',
+  '/a:id/:name' : 'Artwork.find',
 
   'get /register' : 'UserController.add',
   'post /register' : 'UserController.create',
@@ -52,7 +53,6 @@ module.exports.routes = {
   '/logout'     : 'AuthController.logout',
 
   '/photoset/:id/delete' : 'PhotosetController.delete'
-
   /*
   // But what if you want your home page to display
   // a signup form located at `views/user/signup.ejs`?

@@ -125,6 +125,7 @@ module.exports = {
           related : result.related
           nearby : result.nearby?[0]
           error : err
+          title : photoset.artwork?.name || ""
 
   findWithLocation : (req, res)->
     Photoset.findWithinBounds req.param('max_lat'), req.param('min_lat'), req.param('max_lng'), req.param('min_lng'), (err, photosets)->

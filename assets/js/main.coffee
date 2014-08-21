@@ -207,7 +207,7 @@ $('.map-canvas[data-map]').each (index, mapDiv)->
   initialize =->
     map = new google.maps.Map mapDiv,
       center: new google.maps.LatLng(mapData.lat , mapData.lng),
-      zoom: 8
+      zoom: mapData.zoom || 8
     $(mapDiv).data 'map', map
     #add marker
     thisMarker = new google.maps.Marker

@@ -38,6 +38,8 @@ module.exports = {
       artwork = results.artwork
       photosets = results.photosets
 
+      return res.send 404 if not artwork
+
       userFields = photosets
       .map    (photoset)       -> photoset.user_id
       .filter (id, index, self)-> id? and index is self.indexOf id #unique

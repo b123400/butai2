@@ -5,7 +5,7 @@ $primary_left_margin: 1%
 $break_large: $nav_min_width/($nav_width/100%)
 $primary_left_min_margin: $break_large*0.01
 
-$break_small: 480px
+$break_small: 600px
 
 nav, .nav-background
   position: fixed
@@ -21,7 +21,7 @@ nav, .nav-background
 
   @media screen and (max-width: $break-small)
     position: relative
-    max-height: 145px
+    max-height: 160px
 
   a, p
     font-size: 12px
@@ -281,17 +281,11 @@ nav, .nav-background
   .photoset
     width: 100%
 
-    .photo
+    .photo, .capture
       width: 50%
-      // height: 100%
-      // background-color: #fbae00
       float: left
-
-    .capture
-      width: 50%
-      // height: 100%
-      // background-color: #d409b7
-      float: left
+      @media screen and (max-width: $break-small)
+        width: 100%
 
     .single-image
       width: 100%

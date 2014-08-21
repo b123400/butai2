@@ -9,10 +9,10 @@ nav, .nav-background {
   text-align: right;
   overflow: hidden;
   z-index: 10; }
-  @media screen and (max-width: 480px) {
+  @media screen and (max-width: 600px) {
     nav, .nav-background {
       position: relative;
-      max-height: 145px; } }
+      max-height: 160px; } }
   nav a, nav p, .nav-background a, .nav-background p {
     font-size: 12px;
     color: black;
@@ -26,7 +26,7 @@ nav, .nav-background {
     font-size: 24px;
     line-height: 24px; }
   nav .logo-caption, .nav-background .logo-caption {
-    color: #aaaaaa;
+    color: #aaa;
     margin: 0;
     margin-bottom: 40px; }
     nav .logo-caption:hover, .nav-background .logo-caption:hover {
@@ -77,7 +77,7 @@ nav, .nav-background {
   @media screen and (max-width: 625px) {
     .primary {
       margin-left: 131.25px; } }
-  @media screen and (max-width: 480px) {
+  @media screen and (max-width: 600px) {
     .primary {
       margin-left: 0; } }
   .primary.extend-right {
@@ -90,8 +90,8 @@ nav, .nav-background {
     margin-bottom: 30px; }
     .primary .paging a {
       text-decoration: none;
-      color: #22afbb;
-      border: solid 1px #22afbb;
+      color: #22AFBB;
+      border: solid 1px #22AFBB;
       padding: 10px 20px;
       border-radius: 20px; }
     .primary .paging a.prev {
@@ -104,12 +104,12 @@ nav, .nav-background {
     .primary .entry .images img {
       float: left;
       width: 49.75%; }
-      @media screen and (max-width: 480px) {
+      @media screen and (max-width: 600px) {
         .primary .entry .images img {
           width: 100%; } }
       .primary .entry .images img:nth-child(2) {
         margin-left: 0.5%; }
-        @media screen and (max-width: 480px) {
+        @media screen and (max-width: 600px) {
           .primary .entry .images img:nth-child(2) {
             margin-left: 0; } }
       .primary .entry .images img.single-image {
@@ -155,13 +155,13 @@ nav, .nav-background {
       text-decoration: none;
       float: right;
       font-size: 12px;
-      color: #999999; }
+      color: #999; }
     .primary .entry a.comment-count {
       background-color: #f9f9f9;
       padding: 5px 10px;
       border-radius: 5px; }
       .primary .entry a.comment-count:hover {
-        background-color: #eeeeee; }
+        background-color: #eee; }
   .primary .artworks div.artwork {
     width: 33%;
     min-width: 250px;
@@ -213,12 +213,12 @@ nav, .nav-background {
           background-color: rgba(0, 0, 0, 0.4); }
   .primary .photoset {
     width: 100%; }
-    .primary .photoset .photo {
+    .primary .photoset .photo, .primary .photoset .capture {
       width: 50%;
       float: left; }
-    .primary .photoset .capture {
-      width: 50%;
-      float: left; }
+      @media screen and (max-width: 600px) {
+        .primary .photoset .photo, .primary .photoset .capture {
+          width: 100%; } }
     .primary .photoset .single-image {
       width: 100%;
       height: 100%;
@@ -241,7 +241,7 @@ nav, .nav-background {
       float: left; }
     .primary .comment .body {
       margin-left: 50px;
-      background: #eeeeee;
+      background: #eee;
       border-radius: 5px;
       padding: 5px;
       font-size: 12px;
@@ -251,7 +251,7 @@ nav, .nav-background {
       height: 0px;
       border-style: solid;
       border-width: 7px 7px 7px 0;
-      border-color: transparent #eeeeee transparent transparent;
+      border-color: transparent #eee transparent transparent;
       width: 0;
       display: block;
       left: 0;
@@ -297,7 +297,7 @@ nav, .nav-background {
     .primary form input[type=text], .primary form input[type=password], .primary form input[type=email] {
       width: 100%;
       border-width: 0 0 1px 0;
-      border-color: #7a7a7a;
+      border-color: #7A7A7A;
       font-size: 2em;
       margin-bottom: 30px;
       height: 40px;
@@ -315,13 +315,13 @@ nav, .nav-background {
       margin-bottom: 30px;
       cursor: pointer; }
       .primary form input[type=submit]:hover, .primary form input[type=button]:hover, .primary form .button:hover {
-        background: #3cbba6; }
+        background: #3CBBA6; }
       .primary form input[type=submit][disabled], .primary form input[type=button][disabled], .primary form .button[disabled] {
-        background: #999999; }
+        background: #999; }
     .primary form input[type=submit] {
-      background: #47dbc3; }
+      background: #47DBC3; }
     .primary form a.button.register {
-      background: #ffc053;
+      background: #FFC053;
       text-decoration: none; }
       .primary form a.button.register:hover {
         background: #cd9a43; }
@@ -342,7 +342,7 @@ nav, .nav-background {
       .primary form .progressbar .progressbar-background {
         width: 0%;
         position: absolute;
-        background: #9efaeb;
+        background: #9EFAEB;
         top: 0;
         height: 40px;
         z-index: 2; }
@@ -425,7 +425,9 @@ nav, .nav-background {
   .primary form.delete .yes {
     background: #d52750; }
   .primary form.delete .no {
-    background: #666666; }
+    background: #666; }
 
 .clearfix {
   clear: both; }
+
+/*# sourceMappingURL=custom.css.map */
