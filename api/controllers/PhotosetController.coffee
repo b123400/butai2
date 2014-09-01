@@ -245,7 +245,7 @@ module.exports = {
           console.log err
           req.socket.emit 'fail', err
           return
-        req.socket.emit 'done', photoset.id
+        req.socket.emit 'done', '/photoset/find/'+photoset.id
 
     processParam = (which)->
       deferred = Q.defer()

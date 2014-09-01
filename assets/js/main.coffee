@@ -16,6 +16,7 @@ if $('.capture').length > 0
 $('#create-photoset').on 'submit', (e)->
   e.preventDefault()
 
+  form = @
   uploadPercentage = 0.5
   waitPercentage = 0.5
 
@@ -45,14 +46,14 @@ $('#create-photoset').on 'submit', (e)->
     shouldStopUpload = false
     stopUpload =-> shouldStopUpload = true
 
-    socket.get '/photoset/create', startData, (result)->
+    socket.get $(form).attr('action'), startData, (result)->
       if result.success
         socket.on 'progress', updateProgress
         socket.on 'fail', (err)->
           handleFail err
           stopUpload()
-        socket.once 'done', (id)->
-          location.href = '/photoset/find/'+id
+        socket.once 'done', (url)->
+          location.href = url
       else
         if result.message
           alert result.message
@@ -107,8 +108,8 @@ $('#create-photoset').on 'submit', (e)->
     enableInput()
 
   submitForm
-    reality : $('input[type=file].reality')[0].files[0] || $('#create-photoset input.reality').val() || ""
-    capture : $('input[type=file].capture')[0].files[0] || $('#create-photoset input.capture').val() || ""
+    reality : $('input[type=file].reality')[0]?.files?[0] || $('#create-photoset input.reality').val() || ""
+    capture : $('input[type=file].capture')[0]?.files?[0] || $('#create-photoset input.capture').val() || ""
     url : $('input.url').val()
     lat : $('.map-canvas').data('location')?.lat?()
     lng : $('.map-canvas').data('location')?.lng?()

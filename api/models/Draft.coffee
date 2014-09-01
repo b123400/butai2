@@ -18,6 +18,8 @@ module.exports = {
     artwork_id : 'integer'
     user_id : 'integer'
     
+    getImageURL : ->
+      console.log sails.models
   }
 
 }

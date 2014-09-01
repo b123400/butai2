@@ -1,0 +1,22 @@
+<div class="entry">
+    <a href="/d<%= draft.id %>">
+        <div class="images">
+            <img class="single-image" src="<%= draft.getImageURL('reality') || draft.getImageURL('capture') %>" />
+            <div class="clearfix"></div>
+        </div>
+    </a>
+    <div class="clearfix"></div>
+    <% if (draft.user) { %>
+        <div class="speach-triangle"></div>
+        <a href="/u<%= draft.user.id %>">
+            <img src="<%= draft.user.avatarURL(150) %>" alt="" class="avatar">
+        </a>
+    <% } %>
+    <% if (draft.address) { %>
+        <a href="/map/<%= draft.address %>" class="location right-item"><%= draft.address %></a>
+    <% } %>
+    <% if (draft.artwork){ %>
+        <a href="/a<%= draft.artwork.id %>" class="artwork right-item"><%= draft.artwork.name %></a>・
+    <% } %>
+    <div class="clearfix"></div>
+</div>
