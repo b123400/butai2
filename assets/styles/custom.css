@@ -101,18 +101,31 @@ nav, .nav-background {
   .primary .entry {
     margin-bottom: 40px;
     width: 100%; }
-    .primary .entry .images img {
-      float: left;
-      width: 49.75%; }
+    .primary .entry .images {
+      position: relative; }
+      .primary .entry .images .photo-wrapper {
+        left: 0;
+        top: 0;
+        width: 50%;
+        height: 100%;
+        overflow: hidden;
+        position: absolute; }
+        .primary .entry .images .photo-wrapper img {
+          height: 100%; }
+      .primary .entry .images .capture-wrapper {
+        line-height: 0;
+        font-size: 0; }
+        .primary .entry .images .capture-wrapper img {
+          width: 100%; }
       @media screen and (max-width: 600px) {
-        .primary .entry .images img {
-          width: 100%; } }
-      .primary .entry .images img:nth-child(2) {
-        margin-left: 0.5%; }
-        @media screen and (max-width: 600px) {
-          .primary .entry .images img:nth-child(2) {
-            margin-left: 0; } }
-      .primary .entry .images img.single-image {
+        .primary .entry .images .photo-wrapper, .primary .entry .images .capture-wrapper {
+          width: 100%;
+          min-width: 100%;
+          position: relative; }
+          .primary .entry .images .photo-wrapper img, .primary .entry .images .capture-wrapper img {
+            width: 100%;
+            height: auto; } }
+      .primary .entry .images > img.single-image {
         width: 100%; }
     .primary .entry .speach-triangle {
       display: block;

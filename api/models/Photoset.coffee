@@ -57,10 +57,10 @@ module.exports = {
       return url
 
     getArtwork : (cb)->
-      Artwork.findOne({id : @artwork_id}).done cb
+      Artwork.findOne({id : @artwork_id}).exec cb
 
     getUser : (cb)->
-      User.findOne({id: @user_id}).done(cb)
+      User.findOne({id: @user_id}).exec(cb)
 
     deleteFileAndDestroy : (cb)->
       filesToDelete = [@reality, @capture].filter (e)-> e

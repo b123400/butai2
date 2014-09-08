@@ -27,7 +27,7 @@ module.exports = {
    ###
   _config: {}
 
-  find : (req, res)->
+  findOne : (req, res)->
     # a = Q.ninvoke Artwork, "findOne", { id: req.param 'id' }
     # p = Q.ninvoke Photoset, "find", { artwork_id: req.param 'id' }
 
@@ -64,7 +64,7 @@ module.exports = {
             {artwork}
           }
 
-  index : (req, res)->
+  find : (req, res)->
     Artwork.find().exec (err, artworks)->
       promises = artworks.map (thisArtwork)->
         Q.ninvoke thisArtwork, "preparePhotosets", 1  # count = 1

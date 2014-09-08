@@ -13,6 +13,14 @@ if $('.capture').length > 0
   catch e
     #pass
 
+$('.entry .images').on 'mousemove', (e)->
+  photoWrapper = $(@).children('.photo-wrapper')
+  return if not photoWrapper.length
+
+  x = (e.pageX - photoWrapper.offset().left) + $(document).scrollLeft();
+  percent = x / $(@).width()*100
+  photoWrapper.css('width',percent+'%')
+
 $('#create-photoset').on 'submit', (e)->
   e.preventDefault()
 

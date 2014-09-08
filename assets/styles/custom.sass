@@ -130,20 +130,36 @@ nav, .nav-background
     width: 100%
     
     .images
-      img
-        float: left
-        width: 49.75%
+      position: relative
+      
+      .photo-wrapper
+        left: 0
+        top: 0
+        width: 50%
+        height: 100%
+        overflow: hidden
+        position: absolute
 
-        @media screen and (max-width: $break-small)
+        img
+          height: 100%
+
+      .capture-wrapper
+        line-height: 0
+        font-size: 0
+        img
           width: 100%
 
-        &:nth-child(2)
-          margin-left: 0.5%
-          @media screen and (max-width: $break-small)
-            margin-left: 0
-
-        &.single-image
+      @media screen and (max-width: $break-small)
+        .photo-wrapper, .capture-wrapper
           width: 100%
+          min-width: 100%
+          position: relative
+          img
+            width: 100%
+            height: auto
+      
+      >img.single-image
+        width: 100%
 
     $triangle_width: 20px
     $triangle_height: 10px

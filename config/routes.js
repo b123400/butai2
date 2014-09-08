@@ -41,10 +41,10 @@ module.exports.routes = {
   '/map/:address': 'MainController.map',
   '/add': 'PhotosetController.create',
   
-  '/ps:id' : 'PhotosetController.find',
-  '/u:id' : 'UserController.find',
-  '/a:id'  : 'Artwork.find',
-  '/a:id/:name' : 'Artwork.find',
+  '/ps:id' : 'PhotosetController.findOne',
+  '/u:id' : 'UserController.findOne',
+  '/a:id'  : 'Artwork.findOne',
+  '/a:id/:name' : 'Artwork.findOne',
 
   'get /register' : 'UserController.add',
   'post /register' : 'UserController.create',

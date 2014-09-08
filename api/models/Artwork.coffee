@@ -38,7 +38,7 @@ module.exports = {
       # no such artwork, create now
       @create
         name : name
-      .done (err, artwork)->
+      .exec (err, artwork)->
         if err
           cb? err
         else
