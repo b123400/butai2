@@ -21,7 +21,7 @@
 // };
 
 
-var app = require('sails').express.app,
+var app = require('sails').hooks.http.app,
         // app = express(),
    passport = require('passport'),
       local = require('../../config/local');

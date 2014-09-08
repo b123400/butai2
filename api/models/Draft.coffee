@@ -18,8 +18,9 @@ module.exports = {
     artwork_id : 'integer'
     user_id : 'integer'
     
-    getImageURL : ->
-      console.log sails.models
+    getImageURL : (args...)->
+      args.unshift 'capture'
+      sails.models.photoset._instanceMethods.getImageURL.apply this, args
   }
 
 }

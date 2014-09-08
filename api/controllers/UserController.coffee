@@ -58,7 +58,7 @@ module.exports = {
         username : req.param 'username'
         password : req.param 'password'
         email : req.param 'email'
-      .done (err, user)->
+      .exec (err, user)->
         return showError JSON.stringify(err) if err
 
         req.logIn user, (err)->

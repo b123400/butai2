@@ -36,7 +36,7 @@ module.exports.routes = {
   //   view: 'home/index'
   // },
 
-  '/' : 'PhotosetController.index',
+  '/' : 'PhotosetController.find',
   '/map': 'MainController.map',
   '/map/:address': 'MainController.map',
   '/add': 'PhotosetController.create',

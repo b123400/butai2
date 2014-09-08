@@ -35,7 +35,7 @@ module.exports = {
     handleError = (err)->
       throw err
 
-    Draft.find().limit(10).skip(req.param('p')*10||0).sort('id DESC').done (err, drafts)->
+    Draft.find().limit(10).skip(req.param('p')*10||0).sort('id DESC').exec (err, drafts)->
       return handleError err if err
 
       userFields = drafts
@@ -78,7 +78,7 @@ module.exports = {
   create : (req, serverResponse)->
 
     if not req.param 'socket'
-      Artwork.find().limit().sort('id DESC').done (err, artworks)->
+      Artwork.find().limit().sort('id DESC').exec (err, artworks)->
         serverResponse.view 'draft/create',
           # sidebarPartial : 'draft/createSidebar',
           artworks : artworks
@@ -135,7 +135,7 @@ module.exports = {
         lng     : req.param 'lng'
         artwork_id : artwork?.id
         user_id : req.user?[0]?.id
-      .done (err, draft)->
+      .exec (err, draft)->
         if err
           handleError err
           return

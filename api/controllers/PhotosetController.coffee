@@ -50,11 +50,11 @@ module.exports = {
   # index : (req, res)->
   #   res.view 'photoset/index'
 
-  index : (req, res)->
+  find : (req, res)->
     async.parallel
-      artworks : (cb)-> Artwork.find().limit().done cb
+      artworks : (cb)-> Artwork.find().limit().exec cb
       photosets : (cb)->
-        Photoset.find().limit(10).skip(req.param('p')*10||0).sort('id DESC').done (err, photosets)->
+        Photoset.find().limit(10).skip(req.param('p')*10||0).sort('id DESC').exec (err, photosets)->
           return cb err if err
 
           userFields = photosets
@@ -97,7 +97,7 @@ module.exports = {
         }
         photosets : results.photosets
 
-  find : (req, res)->
+  findOne : (req, res)->
     Photoset.findOne(req.param('id')).exec (err, photoset)->
 
       console.log err if err
@@ -193,7 +193,7 @@ module.exports = {
 
 
     if not req.param 'socket'
-      Artwork.find().limit().sort('id DESC').done (err, artworks)->
+      Artwork.find().limit().sort('id DESC').exec (err, artworks)->
         serverResponse.view 'photoset/create',
           sidebarPartial : 'photoset/createSidebar',
           artworks : artworks
@@ -240,7 +240,7 @@ module.exports = {
         lng     : req.param 'lng'
         artwork_id : artwork?.id
         user_id : req.user?[0]?.id
-      .done (err, photoset)->
+      .exec (err, photoset)->
         if err
           console.log err
           req.socket.emit 'fail', err

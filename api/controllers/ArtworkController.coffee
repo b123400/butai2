@@ -49,7 +49,7 @@ module.exports = {
           if not userFields.length
             cb null, []
           else
-            User.find({id: userFields}).sort('id DESC').done cb
+            User.find({id: userFields}).sort('id DESC').exec cb
       , (err, results)->
         console.log err if err
 
@@ -65,11 +65,11 @@ module.exports = {
           }
 
   index : (req, res)->
-    Artwork.find().done (err, artworks)->
+    Artwork.find().exec (err, artworks)->
       promises = artworks.map (thisArtwork)->
         Q.ninvoke thisArtwork, "preparePhotosets", 1  # count = 1
 
-      Q.all(promises).done ->
+      Q.all(promises).exec ->
         res.view 'artwork/index', {
           artworks,
           extraClass : 'extend-right'
@@ -78,6 +78,6 @@ module.exports = {
   create : (req, res)->
     Artwork.create
       name : req.param 'name'
-    .done (err, result)->
+    .exec (err, result)->
       res.json result
 }
