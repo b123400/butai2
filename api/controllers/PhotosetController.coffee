@@ -177,14 +177,22 @@ module.exports = {
 
   embed : (req, res)->
     Photoset.findOne( req.param('id') ).exec (err, photoset)->
-      return console.log err if err
-      res.view 'photoset/embed',
-        layout : null
-        photoset : photoset
-        imageHeight : req.param('height') || 564
-        imageWidth : req.param('width') || 1000
-        showControl : req.param('showControl') is "true"
-        sideBySide : req.param('sideBySide') is "true"
+      async.parallel
+        user    : (cb)-> photoset.getUser cb
+        artwork : (cb)-> photoset.getArtwork cb
+      , (err, result)->
+
+        photoset.user = result.user
+        photoset.artwork = result.artwork
+
+        return console.log err if err
+        res.view 'photoset/embed',
+          layout : null
+          photoset : photoset
+          imageHeight : req.param('height') || 564
+          imageWidth : req.param('width') || 1000
+          showControl : req.param('showControl') is "true"
+          sideBySide : req.param('sideBySide') is "true"
 
   findWithLocation : (req, res)->
     Photoset.findWithinBounds req.param('max_lat'), req.param('min_lat'), req.param('max_lng'), req.param('min_lng'), (err, photosets)->
@@ -252,7 +260,7 @@ module.exports = {
 
 
     if not req.param 'socket'
-      Artwork.find().limit().sort('id DESC').exec (err, artworks)->
+      Artwork.find().sort('id DESC').exec (err, artworks)->
         serverResponse.view 'photoset/create',
           sidebarPartial : 'photoset/createSidebar',
           artworks : artworks

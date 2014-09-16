@@ -13,7 +13,7 @@ passport.deserializeUser(function(id, done) {
 
 passport.use(new LocalStrategy(
   function(username, password, done) {
-    User.findByUsername(username).done(function(err, users) {
+    User.findByUsername(username).exec(function(err, users) {
         var user = users[0]
         if (err) {
             return done(null, err);

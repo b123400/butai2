@@ -103,7 +103,9 @@ nav, .nav-background {
     width: 100%; }
     .primary .entry .images {
       position: relative;
-      width: 100%; }
+      width: 100%;
+      font-size: 0;
+      line-height: 0; }
       .primary .entry .images .photo-wrapper {
         left: 0;
         top: 0;

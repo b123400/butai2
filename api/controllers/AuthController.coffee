@@ -46,7 +46,6 @@ module.exports = {
         return
 
       req.logIn user, (err)->
-        console.log 'called login', arguments
         if err
           console.log err
           res.view 'auth/login',

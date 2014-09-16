@@ -213,12 +213,13 @@ $('#create-photoset .auto-complete').each (ele)->
     if filteredArtwork.length is 0
       return false
     filteredArtwork.forEach (artwork)->
-      suggestionList.append $('<div>')
+      suggestionList.append($('<div>')
       .addClass('artwork-suggestion-item')
       .html(artwork.name)
       .click ->
         input.val artwork.name
         suggestion.fadeOut()
+      )
     return true
 
 $('.map-canvas[data-map]').each (index, mapDiv)->
