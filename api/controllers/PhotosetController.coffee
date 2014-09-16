@@ -127,6 +127,65 @@ module.exports = {
           error : err
           title : photoset.artwork?.name || ""
 
+  embededScript : (req, res)->
+    if not Number(req.param('id'))
+      return res.redirect('/')
+
+    url = req.protocol+'://'+req.get('host')+"/ps"+req.param('id')+"/embed?"
+
+    options =
+      width: Number(req.param('width')) || 1000
+      height: Number(req.param('height')) || 564
+      sideBySide: if req.param('sideBySide') != undefined then req.param('sideBySide') else false
+      showControl: if req.param('showControl') != undefined then req.param('showControl') else false
+      autoResize: req.param('autoResize')
+
+    frameHeight = 
+      if options.sideBySide && not options.showControl
+      then options.height + options.height / 2 + 50
+      else options.height + 50
+
+    addParam = (field, value)->
+      url += "#{field}=#{value}&" if value isnt undefined
+
+    addParam field, value for field, value of options
+
+    resizeCode = """
+      window.addEventListener('message',function (e) {
+        iframe.height = e.data+"px";
+      });
+    """
+
+    embedString = """
+      (function () {
+        var iframe = document.createElement('iframe');
+        iframe.src = "#{url}";
+        iframe.width = "#{options.width}px";
+        iframe.height = "#{frameHeight}px";
+        iframe.style.border = 0;
+        document.getElementById('butai-embed-#{req.param('id')}').appendChild(iframe);
+
+        #{ if options.autoResize then resizeCode else "" }
+
+      })();
+    """
+    res.send embedString
+
+  makeEmbed : (req, res)->
+    res.view 'photoset/makeEmbed',
+      id : req.param 'id'
+
+  embed : (req, res)->
+    Photoset.findOne( req.param('id') ).exec (err, photoset)->
+      return console.log err if err
+      res.view 'photoset/embed',
+        layout : null
+        photoset : photoset
+        imageHeight : req.param('height') || 564
+        imageWidth : req.param('width') || 1000
+        showControl : req.param('showControl') is "true"
+        sideBySide : req.param('sideBySide') is "true"
+
   findWithLocation : (req, res)->
     Photoset.findWithinBounds req.param('max_lat'), req.param('min_lat'), req.param('max_lng'), req.param('min_lng'), (err, photosets)->
       return res.json err, 500 if err

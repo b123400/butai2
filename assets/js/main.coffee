@@ -21,6 +21,16 @@ $('.entry .images').on 'mousemove', (e)->
   percent = x / $(@).width()*100
   photoWrapper.css('width',percent+'%')
 
+$('.entry .images .control .overlap').on 'click', (e)->
+  e.stopPropagation()
+  e.preventDefault()
+  $(@).parents('.entry .images').removeClass('side-by-side')
+
+$('.entry .images .control .side-by-side').on 'click', (e)->
+  e.stopPropagation()
+  e.preventDefault()
+  $(@).parents('.entry .images').addClass('side-by-side')
+
 $('#create-photoset').on 'submit', (e)->
   e.preventDefault()
 
@@ -333,3 +343,35 @@ $('.map-canvas.browser').each (index, mapDiv)->
       loadAddress address
   
   google.maps.event.addDomListener(window, 'load', initialize);
+
+$('.make-embed').each ->
+  
+  photosetId = => Number($(@).data 'photoset-id')
+  width      = => Number($(@).find('input[name=width]').val())
+  height     = => Number($(@).find('input[name=height]').val())
+  sideBySide = => $(@).find('input[name=side-by-side]:checked').val() is "true"
+  showControl= => $(@).find('input[name=showControl]:checked').val() is "true"
+  autoResize = => $(@).find('input[name=resize]:checked').val() is "true"
+
+  $(@).find('input').on 'change keyup input', ->
+    refreshEmbededText()
+  
+  refreshEmbededText = =>
+
+    url = document.location.origin+"/ps#{photosetId()}/embededScript?"
+
+    addParam = (field, value, defaultValue)->
+      url += "#{field}=#{value}&" if String(value) != String(defaultValue)
+
+    addParam 'width', width(), 1000
+    addParam 'height', height(), 564
+    addParam 'sideBySide', sideBySide(), false
+    addParam 'showControl', showControl(), false
+    addParam 'autoResize', autoResize(), false
+
+    $(@).find('textarea').val """
+<div id="butai-embed-#{photosetId()}"></div>
+<script src="#{url}"></script>
+    """.replace(/\n/g,"")
+
+  refreshEmbededText()

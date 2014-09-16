@@ -1,0 +1,37 @@
+<html>
+    <head>
+        <link rel="stylesheet" href="/styles/normalize.css">
+        <link rel="stylesheet" href="/styles/embed-photoset.css">
+        <script src="/js/vendor/modernizr-2.6.2.min.js"></script>
+        <link href='http://fonts.googleapis.com/css?family=Abel|Ropa+Sans|Wire+One' rel='stylesheet' type='text/css'>
+    </head>
+    <body>
+
+        <%- partial('photoset',{
+            photoset: photoset,
+            showLogo: true,
+            showControl: showControl,
+            responsive: false,
+            imageWidth : imageWidth,
+            imageHeight : imageHeight,
+            sideBySide : sideBySide
+        }) %>
+
+        <script src="//ajax.googleapis.com/ajax/libs/jquery/1.10.2/jquery.min.js"></script>
+        <script>window.jQuery || document.write('<script src="js/vendor/jquery-1.10.2.min.js"><\/script>')</script>
+        <script src="/js/plugins.js"></script>
+        <script src="/js/main.js"></script>
+
+        <script>
+            $('.overlap,.side-by-side').on('click',function () {
+                notifyRefreshed()
+            });
+            function notifyRefreshed(){
+                var height = $('.entry a:last').offset().top + $('.entry a:last').height() + 14;
+                try{
+                    parent.postMessage(height,'*')
+                }catch(e){}
+            }
+        </script>
+    </body>
+</html>

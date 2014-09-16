@@ -102,7 +102,8 @@ nav, .nav-background {
     margin-bottom: 40px;
     width: 100%; }
     .primary .entry .images {
-      position: relative; }
+      position: relative;
+      width: 100%; }
       .primary .entry .images .photo-wrapper {
         left: 0;
         top: 0;
@@ -117,16 +118,46 @@ nav, .nav-background {
         font-size: 0; }
         .primary .entry .images .capture-wrapper img {
           width: 100%; }
+      .primary .entry .images.side-by-side .photo-wrapper, .primary .entry .images.side-by-side .capture-wrapper {
+        width: 50%;
+        max-width: 50%;
+        min-width: 50%;
+        float: left;
+        position: relative;
+        height: auto; }
+        .primary .entry .images.side-by-side .photo-wrapper img, .primary .entry .images.side-by-side .capture-wrapper img {
+          height: auto;
+          width: 100%; }
       @media screen and (max-width: 600px) {
-        .primary .entry .images .photo-wrapper, .primary .entry .images .capture-wrapper {
+        .primary .entry .images.responsive .photo-wrapper, .primary .entry .images.responsive .capture-wrapper {
           width: 100%;
           min-width: 100%;
+          height: auto;
           position: relative; }
-          .primary .entry .images .photo-wrapper img, .primary .entry .images .capture-wrapper img {
+          .primary .entry .images.responsive .photo-wrapper img, .primary .entry .images.responsive .capture-wrapper img {
             width: 100%;
             height: auto; } }
       .primary .entry .images > img.single-image {
         width: 100%; }
+      .primary .entry .images div.control {
+        transition: opacity 0.5s;
+        opacity: 0;
+        position: absolute;
+        right: 10px;
+        top: 10px;
+        border: solid 1px rgba(255, 255, 255, 0.4);
+        background-color: rgba(0, 0, 0, 0.3);
+        border-radius: 5px;
+        font-size: 0;
+        line-height: 0; }
+        .primary .entry .images div.control .overlap {
+          border-right: solid 1px rgba(255, 255, 255, 0.4); }
+        .primary .entry .images div.control .overlap, .primary .entry .images div.control .side-by-side {
+          display: inline-block; }
+          .primary .entry .images div.control .overlap:hover, .primary .entry .images div.control .side-by-side:hover {
+            background-color: rgba(0, 0, 0, 0.6); }
+      .primary .entry .images:hover div.control {
+        opacity: 1; }
     .primary .entry .speach-triangle {
       display: block;
       height: 10px;
@@ -439,6 +470,15 @@ nav, .nav-background {
     background: #d52750; }
   .primary form.delete .no {
     background: #666; }
+  .primary .make-embed {
+    text-align: center; }
+    .primary .make-embed table {
+      margin: 0 auto; }
+      .primary .make-embed table td:first-child {
+        text-align: right; }
+      .primary .make-embed table td:last-child {
+        padding-left: 20px;
+        text-align: left; }
 
 .clearfix {
   clear: both; }

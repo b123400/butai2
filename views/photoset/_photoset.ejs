@@ -1,16 +1,36 @@
+<%
+showLogo = typeof showLogo == "undefined" ? false : showLogo;
+showControl = typeof showControl == "undefined"? false : showControl;
+responsive = typeof responsive == "undefined"? true : false;
+sideBySide = typeof sideBySide == "undefined"? false : sideBySide;
+imageWidth = typeof imageWidth == "undefined"? 1000 : imageWidth;
+imageHeight = typeof imageHeight == "undefined"? 564 : imageHeight;
+%>
 <div class="entry">
-    <a href="/ps<%= photoset.id %>">
-        <div class="images">
+    <a href="/ps<%= photoset.id %>" <%- showLogo ? "target='_blank'":"" %> >
+        <div class="images <%- responsive ? "responsive":"" %> <%- sideBySide? "side-by-side" : "" %> ">
             <% if( photoset.getImageURL('reality') && photoset.getImageURL('capture') ){ %>
                 <div class="photo-wrapper">
-                    <img class="photo" src="<%= photoset.getImageURL('reality', 1000, 564) %>"/>
+                    <img class="photo" src="<%= photoset.getImageURL('reality', imageWidth, imageHeight) %>"/>
                 </div>
                 <div class="capture-wrapper">
-                    <img class="capture" src="<%= photoset.getImageURL('capture', 1000, 564) %>"/>
+                    <img class="capture" src="<%= photoset.getImageURL('capture', imageWidth, imageHeight) %>"/>
                 </div>
             <% } else { %>
                 <img class="single-image" src="<%= photoset.getImageURL('reality') || photoset.getImageURL('capture') %>" />
             <% } %>
+
+            <% if (showControl){ %>
+                <div class="control">
+                    <div class="overlap">
+                        <img src="/images/photoset-overlap.png" alt="Overlap">
+                    </div>
+                    <div class="side-by-side">
+                        <img src="/images/photoset-side-by-side.png" alt="Side by side">
+                    </div>
+                </div>
+            <% } %>
+
         </div>
     </a>
     <div class="clearfix"></div>
@@ -20,11 +40,14 @@
             <img src="<%= photoset.user.avatarURL(150) %>" alt="" class="avatar">
         </a>
     <% } %>
+    <% if (showLogo) { %>
+        <a href="http://but.ai" class="location right-item" target="_blank">Powered by Butai</a>
+    <% } %>
     <% if (photoset.address) { %>
-        <a href="/map/<%= photoset.address %>" class="location right-item"><%= photoset.address %></a>
+        <a href="/map/<%= photoset.address %>" class="location right-item" <% if (typeof showLogo != "undefined" && showLogo) { %>target="_blank"<% } %> ><%= photoset.address %></a>
     <% } %>
     <% if (photoset.artwork){ %>
-        <a href="/a<%= photoset.artwork.id %>" class="artwork right-item"><%= photoset.artwork.name %></a>・
+        <a href="/a<%= photoset.artwork.id %>" class="artwork right-item" <% if (typeof showLogo != "undefined" && showLogo) { %>target="_blank"<% } %> ><%= photoset.artwork.name %></a>・
     <% } %>
     <div class="clearfix"></div>
 </div>

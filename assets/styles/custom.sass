@@ -129,103 +129,7 @@ nav, .nav-background
     margin-bottom: 40px
     width: 100%
     
-    .images
-      position: relative
-      
-      .photo-wrapper
-        left: 0
-        top: 0
-        width: 50%
-        height: 100%
-        overflow: hidden
-        position: absolute
-
-        img
-          height: 100%
-
-      .capture-wrapper
-        line-height: 0
-        font-size: 0
-        img
-          width: 100%
-
-      @media screen and (max-width: $break-small)
-        .photo-wrapper, .capture-wrapper
-          width: 100%
-          min-width: 100%
-          position: relative
-          img
-            width: 100%
-            height: auto
-      
-      >img.single-image
-        width: 100%
-
-    $triangle_width: 20px
-    $triangle_height: 10px
-    $avatar_left: 20px
-    $avatar_size : 40px
-    .speach-triangle
-      display: block
-      height: $triangle_height
-      margin-top: -$triangle_height
-
-      &:before
-        content: "."
-        height: 0px
-        border-style: solid
-        border-width: 0px $triangle_width/2 $triangle_height 0px
-        border-color: transparent transparent white transparent
-        font-size: 0
-        width: $avatar_left + ($avatar_size - $triangle_width)/2
-        display: block
-        position: absolute
-
-      &:after
-        content: "."
-        height: 0px
-        border-style: solid
-        border-width: 0px 0px $triangle_width/2 $triangle_height
-        border-color: transparent transparent white transparent
-        font-size: 0
-        left: $avatar_left + $avatar_size/2
-        position: absolute
-        display: block
-        right: 0px
-        
-    .avatar
-      margin-top: 5px
-      width: $avatar_size
-      height: $avatar_size
-      border-radius: $avatar_size/2
-      margin-left: $avatar_left
-
-    span.title
-      margin-top: ($avatar_size - 13px)/2 + 5px
-      font-size: 15px
-      display: inline-block
-
-    a.right-item
-      margin-top: ($avatar_size - 12px)/2
-      padding: 5px
-      text-decoration: none
-      float: right
-      font-size: 12px
-      color: #999
-
-    a.comment-count
-      background-color: #f9f9f9
-      padding: 5px 10px
-      border-radius: 5px
-
-      &:hover
-        background-color: #eee
-
-    a.location
-      //nothing
-
-    a.location
-      //nothing
+    @import "./embed-photoset.sass"
   
   .artworks
     div.artwork
@@ -547,6 +451,16 @@ nav, .nav-background
       background: #d52750
     .no
       background: #666
+
+  .make-embed
+    text-align: center
+    table
+      margin: 0 auto
+      td:first-child
+        text-align: right
+      td:last-child
+        padding-left: 20px
+        text-align: left
 
 .clearfix
   clear: both

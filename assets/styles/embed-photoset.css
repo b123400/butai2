@@ -1,0 +1,112 @@
+.images {
+  position: relative;
+  width: 100%; }
+  .images .photo-wrapper {
+    left: 0;
+    top: 0;
+    width: 50%;
+    height: 100%;
+    overflow: hidden;
+    position: absolute; }
+    .images .photo-wrapper img {
+      height: 100%; }
+  .images .capture-wrapper {
+    line-height: 0;
+    font-size: 0; }
+    .images .capture-wrapper img {
+      width: 100%; }
+  .images.side-by-side .photo-wrapper, .images.side-by-side .capture-wrapper {
+    width: 50%;
+    max-width: 50%;
+    min-width: 50%;
+    float: left;
+    position: relative;
+    height: auto; }
+    .images.side-by-side .photo-wrapper img, .images.side-by-side .capture-wrapper img {
+      height: auto;
+      width: 100%; }
+  @media screen and (max-width: 600px) {
+    .images.responsive .photo-wrapper, .images.responsive .capture-wrapper {
+      width: 100%;
+      min-width: 100%;
+      height: auto;
+      position: relative; }
+      .images.responsive .photo-wrapper img, .images.responsive .capture-wrapper img {
+        width: 100%;
+        height: auto; } }
+  .images > img.single-image {
+    width: 100%; }
+  .images div.control {
+    transition: opacity 0.5s;
+    opacity: 0;
+    position: absolute;
+    right: 10px;
+    top: 10px;
+    border: solid 1px rgba(255, 255, 255, 0.4);
+    background-color: rgba(0, 0, 0, 0.3);
+    border-radius: 5px;
+    font-size: 0;
+    line-height: 0; }
+    .images div.control .overlap {
+      border-right: solid 1px rgba(255, 255, 255, 0.4); }
+    .images div.control .overlap, .images div.control .side-by-side {
+      display: inline-block; }
+      .images div.control .overlap:hover, .images div.control .side-by-side:hover {
+        background-color: rgba(0, 0, 0, 0.6); }
+  .images:hover div.control {
+    opacity: 1; }
+
+.speach-triangle {
+  display: block;
+  height: 10px;
+  margin-top: -10px; }
+  .speach-triangle:before {
+    content: ".";
+    height: 0px;
+    border-style: solid;
+    border-width: 0px 10px 10px 0px;
+    border-color: transparent transparent white transparent;
+    font-size: 0;
+    width: 30px;
+    display: block;
+    position: absolute; }
+  .speach-triangle:after {
+    content: ".";
+    height: 0px;
+    border-style: solid;
+    border-width: 0px 0px 10px 10px;
+    border-color: transparent transparent white transparent;
+    font-size: 0;
+    left: 40px;
+    position: absolute;
+    display: block;
+    right: 0px; }
+
+.avatar {
+  margin-top: 5px;
+  width: 40px;
+  height: 40px;
+  border-radius: 20px;
+  margin-left: 20px; }
+
+span.title {
+  margin-top: 18.5px;
+  font-size: 15px;
+  display: inline-block; }
+
+a.right-item {
+  margin-top: 14px;
+  padding: 5px;
+  text-decoration: none;
+  float: right;
+  font-size: 12px;
+  color: #999; }
+
+a.comment-count {
+  background-color: #f9f9f9;
+  padding: 5px 10px;
+  border-radius: 5px; }
+  a.comment-count:hover {
+    background-color: #eee; }
+
+/*# sourceMappingURL=embed-photoset.css.map */

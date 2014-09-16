@@ -52,7 +52,10 @@ module.exports.routes = {
   'post /login' : 'AuthController.process',
   '/logout'     : 'AuthController.logout',
 
-  '/photoset/:id/delete' : 'PhotosetController.delete'
+  '/photoset/:id/delete' : 'PhotosetController.delete',
+  '/ps:id/embed' : 'PhotosetController.embed',
+  '/ps:id/makeEmbed' : 'PhotosetController.makeEmbed',
+  '/ps:id/embededScript' : 'PhotosetController.embededScript'
   /*
   // But what if you want your home page to display
   // a signup form located at `views/user/signup.ejs`?
