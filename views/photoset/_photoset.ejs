@@ -47,7 +47,7 @@ imageHeight = typeof imageHeight == "undefined"? 564 : imageHeight;
         <a href="/map/<%= photoset.address %>" class="location right-item" <% if (typeof showLogo != "undefined" && showLogo) { %>target="_blank"<% } %> ><%= photoset.address %></a>
     <% } %>
     <% if (photoset.artwork){ %>
-        <a href="/a<%= photoset.artwork.id %>" class="artwork right-item" <% if (typeof showLogo != "undefined" && showLogo) { %>target="_blank"<% } %> ><%= photoset.artwork.name %></a>・
+        <a href="/a<%= photoset.artwork.id %>" class="artwork right-item" <% if (typeof showLogo != "undefined" && showLogo) { %>target="_blank"<% } %> ><%= photoset.artwork.name %></a>
     <% } %>
     <div class="clearfix"></div>
 </div>
