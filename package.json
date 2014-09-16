@@ -22,7 +22,7 @@
         "async" : "~0.9.0"
     },
     "scripts": {
-        "start": "node app.js --port 9000",
+        "start": "node app.js --port 5000",
         "debug": "node debug app.js"
     },
     "main": "app.js",
