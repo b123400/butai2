@@ -36,7 +36,7 @@ imageHeight = typeof imageHeight == "undefined"? 564 : imageHeight;
     <div class="clearfix"></div>
     <% if (photoset.user) { %>
         <div class="speach-triangle"></div>
-        <a href="/u<%= photoset.user.id %>">
+        <a href="/u<%= photoset.user.id %>" <%- showLogo ? "target='_blank'":"" %>>
             <img src="<%= photoset.user.avatarURL(150) %>" alt="" class="avatar">
         </a>
     <% } %>
