@@ -193,6 +193,7 @@ module.exports = {
           imageWidth : req.param('width') || 1000
           showControl : req.param('showControl') is "true"
           sideBySide : req.param('sideBySide') is "true"
+          autoResize : req.param('autoResize') is "true"
 
   findWithLocation : (req, res)->
     Photoset.findWithinBounds req.param('max_lat'), req.param('min_lat'), req.param('max_lng'), req.param('min_lng'), (err, photosets)->
@@ -312,7 +313,7 @@ module.exports = {
           console.log err
           req.socket.emit 'fail', err
           return
-        req.socket.emit 'done', '/photoset/find/'+photoset.id
+        req.socket.emit 'done', '/ps'+photoset.id
 
     processParam = (which)->
       deferred = Q.defer()

@@ -21,17 +21,19 @@
         <script>window.jQuery || document.write('<script src="js/vendor/jquery-1.10.2.min.js"><\/script>')</script>
         <script src="/js/plugins.js"></script>
         <script src="/js/main.js"></script>
-
-        <script>
-            $('.overlap,.side-by-side').on('click',function () {
-                notifyRefreshed()
-            });
-            function notifyRefreshed(){
-                var height = $('.entry a:last').offset().top + $('.entry a:last').height() + 14;
-                try{
-                    parent.postMessage(height,'*')
-                }catch(e){}
-            }
-        </script>
+        
+        <% if (autoResize) { %>
+            <script>
+                $('.overlap,.side-by-side').on('click',function () {
+                    notifyRefreshed()
+                });
+                function notifyRefreshed(){
+                    var height = $('.entry a:last').offset().top + $('.entry a:last').height() + 14;
+                    try{
+                        parent.postMessage(height,'*')
+                    }catch(e){}
+                }
+            </script>
+        <% } %>
     </body>
 </html>

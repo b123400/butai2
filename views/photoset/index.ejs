@@ -1,5 +1,5 @@
 <% photosets.forEach(function(photoset){ %>
-    <%- partial('photoset',{photoset:photoset}) %>
+    <%- partial('photoset',{photoset:photoset, showControl:true}) %>
 <% }) %>
 <div class="paging">
 	<% var page = req.param('p')? Number(req.param('p')) : 0;
