@@ -152,7 +152,10 @@ module.exports = {
 
     resizeCode = """
       window.addEventListener('message',function (e) {
-        iframe.height = e.data+"px";
+        var data = JSON.parse(e.data);
+        if (data.photosetId == "#{req.param('id')}"){
+          iframe.height = data.height+"px";
+        }
       });
     """
 

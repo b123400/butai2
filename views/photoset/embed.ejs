@@ -30,7 +30,7 @@
                 function notifyRefreshed(){
                     var height = $('.entry a:last').offset().top + $('.entry a:last').height() + 14;
                     try{
-                        parent.postMessage(height,'*')
+                        parent.postMessage(JSON.stringify({height:height, photosetId:<%- photoset.id %>}),'*')
                     }catch(e){}
                 }
             </script>
