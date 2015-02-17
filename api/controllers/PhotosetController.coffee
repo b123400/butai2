@@ -21,7 +21,16 @@ util = require 'util'
 validator = require 'validator'
 Q = require 'q'
 async = require 'async'
+sails = require 'sails'
 ImageUploader = require './ImageUploader'
+
+PredictionIO = null
+predictionClient = null
+try
+  PredictionIO = require 'predictionio-driver'
+  predictionClient = new PredictionIO.Events
+    appId: sails.config.predictionio.appId
+    accessKey: sails.config.predictionio.accessKey
 
 # class Forwarder extends stream.Transform
 #   _transform: (chunk, encoding, callback) ->
@@ -107,12 +116,7 @@ module.exports = {
         user    : (cb)-> photoset.getUser cb
         artwork : (cb)-> photoset.getArtwork cb
         nearby  : (cb)-> photoset.getNearBy 1, cb
-        related : (cb)->
-          return cb null, null if not photoset.artwork_id
-          Photoset.findOne {
-            artwork_id: photoset.artwork_id
-            id : {'not': photoset.id}
-          }, cb
+        related : (cb)-> photoset.getRelated 1, cb
       , (err, result)->
         photoset.user = result.user
         photoset.artwork = result.artwork
@@ -122,10 +126,17 @@ module.exports = {
           sidebarContent :
             photoset : photoset
           photoset : photoset
-          related : result.related
+          related : result.related?[0]
           nearby : result.nearby?[0]
           error : err
           title : photoset.artwork?.name || ""
+
+      predictionClient?.createAction {
+        event: 'view'
+        uid: req.user?[0]?.id || 0
+        iid: "p"+photoset.id
+      }, (err, predictionEvent)->
+        console.log 'sent to preditionio', err, predictionEvent
 
   embededScript : (req, res)->
     if not Number(req.param('id'))

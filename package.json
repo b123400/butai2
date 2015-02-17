@@ -19,10 +19,11 @@
         "bcrypt" : "~0.7.8",
         "passport" : "~0.2.0",
         "passport-local" : "~1.0.0",
-        "async" : "~0.9.0"
+        "async" : "~0.9.0",
+        "predictionio-driver" : "*"
     },
     "scripts": {
-        "start": "node app.js --port 5000",
+        "start": "node app.js --port 9000",
         "debug": "node debug app.js"
     },
     "main": "app.js",

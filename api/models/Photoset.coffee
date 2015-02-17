@@ -12,6 +12,12 @@ crypto = require 'crypto'
 knox = require 'knox'
 client = knox.createClient sails.config.aws
 
+PredictionIO = null
+predictionEngine = null
+try
+  PredictionIO = require 'predictionio-driver'
+  predictionEngine = new PredictionIO.Engine url: "http://52.0.108.214:8000"
+
 module.exports = {
 
   attributes: {
@@ -87,6 +93,36 @@ module.exports = {
           photosets.sort (a, b)->
             ids.indexOf(a)-ids.indexOf(b)
           cb null, photosets
+
+    getRelated : (count=1, cb)->
+      return cb? null, null if not @artwork_id
+      return cb? null, [] if count is 0
+
+      count = Number count
+      @getPrediction count, (err, results)=>
+        return cb null, results if not err #return prediction
+
+        # failed to get prediction
+        console.log err
+        Photoset.find({
+          artwork_id: @artwork_id
+          id : {'not': @id}
+          })
+          .limit(count)
+          .exec(cb)
+
+    getPrediction : (count=1, cb)->
+      return cb "PredictionIO Engine not found", null if not predictionEngine
+      return cb null, [] if count is 0
+
+      predictionEngine.sendQuery {
+        items : ['p'+@id]
+        categories : ['a'+@artwork_id]
+        num : count
+      }, (err, {itemScores})->
+        return cb err if err
+        id = itemScores.map (i)-> Number i.item.replace('p','')
+        Photoset.find {id}, cb
   }
 
   findWithinBounds : (maxLat, minLat, maxLng, minLng, cb)->
