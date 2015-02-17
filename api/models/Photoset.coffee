@@ -16,7 +16,7 @@ PredictionIO = null
 predictionEngine = null
 try
   PredictionIO = require 'predictionio-driver'
-  predictionEngine = new PredictionIO.Engine url: "http://52.0.108.214:8000"
+  predictionEngine = new PredictionIO.Engine url: sails.config.predictionio.engineUrl
 
 module.exports = {
 

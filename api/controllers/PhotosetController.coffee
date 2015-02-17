@@ -29,7 +29,7 @@ predictionClient = null
 try
   PredictionIO = require 'predictionio-driver'
   predictionClient = new PredictionIO.Events
-    url : "http://52.0.108.214:7070"
+    url : sails.config.predictionio.eventUrl
     appId: sails.config.predictionio.appId
     accessKey: sails.config.predictionio.accessKey
 
@@ -134,7 +134,7 @@ module.exports = {
 
       predictionClient?.createAction {
         event: 'view'
-        uid: req.user?[0]?.id || 0
+        uid: "u"+(req.user?[0]?.id || 0)
         iid: "p"+photoset.id
       }, (err, predictionEvent)->
 
@@ -328,6 +328,14 @@ module.exports = {
           req.socket.emit 'fail', err
           return
         req.socket.emit 'done', '/ps'+photoset.id
+
+        # predictionio
+        predictionClient?.createItem {
+          iid: "p"+photoset.id
+          properties :
+            categories : if artwork?.id? then [artwork?.id] else []
+          }
+        , (err, predictionEvent)->
 
     processParam = (which)->
       deferred = Q.defer()

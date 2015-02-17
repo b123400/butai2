@@ -16,6 +16,16 @@
 ###
 async = require 'async'
 validator = require 'validator'
+sails = require 'sails'
+
+PredictionIO = null
+predictionClient = null
+try
+  PredictionIO = require 'predictionio-driver'
+  predictionClient = new PredictionIO.Events
+    url : sails.config.predictionio.eventUrl
+    appId: sails.config.predictionio.appId
+    accessKey: sails.config.predictionio.accessKey
 
 module.exports = {
     
@@ -64,6 +74,11 @@ module.exports = {
         req.logIn user, (err)->
           return showError err if err
           res.view 'user/thanks'
+
+        predictionClient?.createUser {
+          uid: 'u'+(req.user?[0]?.id || 0)
+          iid: "p"+photoset.id
+        }, (err, predictionEvent)->
 
   findOne : (req, res)->
     async.parallel
