@@ -29,6 +29,7 @@ predictionClient = null
 try
   PredictionIO = require 'predictionio-driver'
   predictionClient = new PredictionIO.Events
+    url : "http://52.0.108.214:7070"
     appId: sails.config.predictionio.appId
     accessKey: sails.config.predictionio.accessKey
 

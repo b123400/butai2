@@ -103,7 +103,6 @@ module.exports = {
         return cb null, results if not err #return prediction
 
         # failed to get prediction
-        console.log err
         Photoset.find({
           artwork_id: @artwork_id
           id : {'not': @id}
@@ -119,8 +118,9 @@ module.exports = {
         items : ['p'+@id]
         categories : ['a'+@artwork_id]
         num : count
-      }, (err, {itemScores})->
+      }, (err, result)->
         return cb err if err
+        {itemScores} = result
         id = itemScores.map (i)-> Number i.item.replace('p','')
         Photoset.find {id}, cb
   }
