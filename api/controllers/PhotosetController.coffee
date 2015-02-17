@@ -137,7 +137,6 @@ module.exports = {
         uid: req.user?[0]?.id || 0
         iid: "p"+photoset.id
       }, (err, predictionEvent)->
-        console.log 'sent to preditionio', err, predictionEvent
 
   embededScript : (req, res)->
     if not Number(req.param('id'))
