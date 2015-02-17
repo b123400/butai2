@@ -117,17 +117,22 @@ module.exports = {
         user    : (cb)-> photoset.getUser cb
         artwork : (cb)-> photoset.getArtwork cb
         nearby  : (cb)-> photoset.getNearBy 1, cb
-        related : (cb)-> photoset.getRelated 1, cb
+        related : (cb)-> photoset.getRelated 2, cb
       , (err, result)->
         photoset.user = result.user
         photoset.artwork = result.artwork
+
+        related = result.related?[0]
+        if result.related?.length >= 2 and result.related?[0] == result.nearby?[0]
+          related = result.related?[1]
+
 
         res.view 'photoset/find',
           sidebarPartial : 'photoset/findSidebar'
           sidebarContent :
             photoset : photoset
           photoset : photoset
-          related : result.related?[0]
+          related : related
           nearby : result.nearby?[0]
           error : err
           title : photoset.artwork?.name || ""
