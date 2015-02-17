@@ -333,7 +333,7 @@ module.exports = {
         predictionClient?.createItem {
           iid: "p"+photoset.id
           properties :
-            categories : if artwork?.id? then [artwork?.id] else []
+            categories : if artwork?.id? then ["a"+artwork?.id] else []
           }
         , (err, predictionEvent)->
 

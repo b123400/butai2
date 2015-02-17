@@ -100,7 +100,7 @@ module.exports = {
 
       count = Number count
       @getPrediction count, (err, results)=>
-        return cb null, results if not err #return prediction
+        return cb null, results if not err and results.length isnt 0 #return prediction
 
         # failed to get prediction
         Photoset.find({
