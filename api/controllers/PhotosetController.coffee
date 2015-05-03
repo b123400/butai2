@@ -62,7 +62,7 @@ module.exports = {
 
   find : (req, res)->
     async.parallel
-      artworks : (cb)-> Artwork.find().limit().exec cb
+      artworks : (cb)-> Artwork.find().limit(20).sort('id DESC').exec cb
       photosets : (cb)->
         Photoset.find().limit(10).skip(req.param('p')*10||0).sort('id DESC').exec (err, photosets)->
           return cb err if err

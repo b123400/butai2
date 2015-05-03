@@ -99,16 +99,16 @@ module.exports = {
       return cb? null, [] if count is 0
 
       count = Number count
-      @getPrediction count, (err, results)=>
-        return cb null, results if not err and results.length isnt 0 #return prediction
+      # @getPrediction count, (err, results)=>
+        # return cb null, results if not err and results.length isnt 0 #return prediction
 
         # failed to get prediction
-        Photoset.find({
-          artwork_id: @artwork_id
-          id : {'not': @id}
-          })
-          .limit(count)
-          .exec(cb)
+      Photoset.find({
+        artwork_id: @artwork_id
+        id : {'not': @id}
+        })
+        .limit(count)
+        .exec(cb)
 
     getPrediction : (count=1, cb)->
       return cb "PredictionIO Engine not found", null if not predictionEngine
