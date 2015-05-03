@@ -40,6 +40,8 @@ module.exports.routes = {
   '/map': 'MainController.map',
   '/map/:address': 'MainController.map',
   '/add': 'PhotosetController.create',
+
+  '/artwork' : 'Artwork.find',
   
   '/ps:id' : 'PhotosetController.findOne',
   '/u:id' : 'UserController.findOne',

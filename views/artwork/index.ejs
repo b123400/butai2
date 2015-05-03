@@ -1,15 +1,22 @@
             <div class="artworks">
-                <% artworks.forEach(function(artwork){ %>
-                    <div class="artwork">
-                        <div class="capture" style="background-image:url(http://s3-ap-northeast-1.amazonaws.com/butai/87/captures_medium.png?1380457234)"></div>
-    <!--                     <div class="photo" style="background-image:url(http://s3-ap-northeast-1.amazonaws.com/butai/53/captures_medium.jpg?1377529361)"></div> -->
-                        <div class="photo" style="background-image:url(http://s3-ap-northeast-1.amazonaws.com/butai/87/photos_medium.png?1380457230)"></div>
-                        <p class="caption">
-                            <span class="artwork"><%= artwork.name %></span>
-                            <span class="location"><%= JSON.stringify(artwork.photosets) %></span>
-                            <!-- <span class="location">京都</span> -->
-                        </p>
-                    </div>
+                <% artworks.forEach(function(artwork){
+                    var photoset = artwork.photosets[0];
+                    %>
+                    <a href="/a<%= artwork.id %>">
+                        <div class="artwork">
+                            <% if (photoset) { %>
+                                <div class="capture" style="background-image:url(<%= photoset.getImageURL('capture', 500, 400) %>)"></div>
+            <!--                     <div class="photo" style="background-image:url(http://s3-ap-northeast-1.amazonaws.com/butai/53/captures_medium.jpg?1377529361)"></div> -->
+                                <div class="photo" style="background-image:url(<%= photoset.getImageURL('reality', 500, 400) %>)"></div>
+                            <% } %>
+                            <p class="caption">
+                                <span class="artwork"><%= artwork.name %></span>
+                                <% if (photoset && photoset.address) { %>
+                                    <span class="location"><%= photoset.address %></span>
+                                <% } %>
+                            </p>
+                        </div>
+                    </a>
                 <% }) %>
             </div>
 

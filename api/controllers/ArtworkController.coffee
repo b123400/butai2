@@ -69,7 +69,7 @@ module.exports = {
       promises = artworks.map (thisArtwork)->
         Q.ninvoke thisArtwork, "preparePhotosets", 1  # count = 1
 
-      Q.all(promises).exec ->
+      Q.all(promises).then ->
         res.view 'artwork/index', {
           artworks,
           extraClass : 'extend-right'

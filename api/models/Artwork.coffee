@@ -16,7 +16,6 @@ module.exports = {
     name : 'string'
 
     getPhotosets : (count=1, cb)->
-      console.log arguments
       Photoset.find()
       .where('artwork_id':@id)
       .limit(count)

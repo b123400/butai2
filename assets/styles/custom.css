@@ -214,7 +214,8 @@ nav, .nav-background {
     height: 300px;
     display: inline-block;
     float: left;
-    position: relative; }
+    position: relative;
+    background-color: #efefef; }
     @media screen and (max-width: 950px) {
       .primary .artworks div.artwork {
         width: 50%; } }
@@ -243,7 +244,8 @@ nav, .nav-background {
       margin: 0 0;
       width: 100%;
       padding: 10px 0;
-      transition: all 0.5s; }
+      transition: all 0.5s;
+      color: black; }
       .primary .artworks div.artwork .caption .artwork {
         font-size: 30px;
         margin-left: 10px; }
@@ -484,5 +486,3 @@ nav, .nav-background {
 
 .clearfix {
   clear: both; }
-
-/*# sourceMappingURL=custom.css.map */
