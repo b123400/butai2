@@ -10,22 +10,17 @@
 
 module.exports.sockets = {
 
-  // This custom onConnect function will be run each time AFTER a new socket connects
-  // (To control whether a socket is allowed to connect, check out `authorization` config.)
-  // Keep in mind that Sails' RESTful simulation for sockets 
-  // mixes in socket.io events for your routes and blueprints automatically.
-  onConnect: function(session, socket) {
-
-    // By default: do nothing
-    // This is a good place to subscribe a new socket to a room, inform other users that
-    // someone new has come online, or any other custom socket.io logic
+  // This custom onDisconnect function will be run each time a socket disconnects
+  beforeConnect: function (handshake, cb) {
+    /* pass back true to allow, false to deny */
+    return cb(null, true);
   },
 
-  // This custom onDisconnect function will be run each time a socket disconnects
-  onDisconnect: function(session, socket) {
+  afterDisconnect: function(session, socket, cb) {
 
     // By default: do nothing
     // This is a good place to broadcast a disconnect message, or any other custom socket.io logic
+    return cb();
   },
 
 
@@ -38,8 +33,7 @@ module.exports.sockets = {
   transports: [
   'websocket',
   'htmlfile',
-  'xhr-polling',
-  'jsonp-polling'
+  'polling'
   ],
 
 
@@ -106,6 +100,7 @@ module.exports.sockets = {
   // use cases, Sails allows you to override the authorization behavior 
   // with your own custom logic by specifying a function, e.g:
   /*
+    // Only for < 0.10.x
     authorization: function authorizeAttemptedSocketConnection(reqObj, cb) {
 
         // Any data saved in `handshake` is available in subsequent requests
@@ -117,7 +112,7 @@ module.exports.sockets = {
         // to report an error, call `cb(err)`
     }
   */
-  authorization: true,
+  // authorization: true,
 
   // Match string representing the origins that are allowed to connect to the Socket.IO server
   origins: '*:*',

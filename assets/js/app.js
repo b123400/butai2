@@ -11,7 +11,7 @@
 (function (io) {
 
   // as soon as this file is loaded, connect automatically, 
-  var socket = io.connect();
+  var socket = io.sails.connect();
   if (typeof console !== 'undefined') {
     log('Connecting to Sails.js...');
   }

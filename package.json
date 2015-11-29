@@ -5,7 +5,7 @@
     "description": "a Sails application",
     "dependencies": {
         "coffee-script" : "1.7.1",
-        "sails": "~0.10",
+        "sails": "~0.11",
         "grunt": "0.4.1",
         "sails-disk": "~0.10",
         "sails-mysql":"~0.10",
@@ -16,11 +16,10 @@
         "request":"~2.34.0",
         "validator" : "~3.12",
         "q" : "~1.0",
-        "bcrypt" : "~0.7.8",
+        "bcrypt" : "~0.8",
         "passport" : "~0.2.0",
         "passport-local" : "~1.0.0",
-        "async" : "~0.9.0",
-        "predictionio-driver" : "*"
+        "async" : "~0.9.0"
     },
     "scripts": {
         "start": "node app.js --port 9000",
