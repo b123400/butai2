@@ -100,12 +100,17 @@ module.exports = {
             cb null, photosets
     , (err, results)->
       console.log err if err
-      res.view 'photoset/index',
-        sidebarPartial : 'photoset/indexSidebar'
-        sidebarContent : {
-          artworks : results.artworks
-        }
-        photosets : results.photosets
+
+      if req.wantsJSON
+        res.json results.photosets
+      else
+        res.view 'photoset/index',
+          sidebarPartial : 'photoset/indexSidebar'
+          sidebarContent : {
+            artworks : results.artworks
+          }
+          photosets : results.photosets
+        
 
   findOne : (req, res)->
     Photoset.findOne(req.param('id')).exec (err, photoset)->
@@ -126,22 +131,19 @@ module.exports = {
         if result.related?.length >= 2 and result.related?[0] == result.nearby?[0]
           related = result.related?[1]
 
-
-        res.view 'photoset/find',
-          sidebarPartial : 'photoset/findSidebar'
-          sidebarContent :
+        if req.wantsJSON
+          res.json {photoset, related, nearby : result.nearby?[0]}
+        else
+          res.view 'photoset/find',
+            sidebarPartial : 'photoset/findSidebar'
+            sidebarContent :
+              photoset : photoset
             photoset : photoset
-          photoset : photoset
-          related : related
-          nearby : result.nearby?[0]
-          error : err
-          title : photoset.artwork?.name || ""
-
-      predictionClient?.createAction {
-        event: 'view'
-        uid: "u"+(req.user?[0]?.id || 0)
-        iid: "p"+photoset.id
-      }, (err, predictionEvent)->
+            related : related
+            nearby : result.nearby?[0]
+            error : err
+            title : photoset.artwork?.name || ""
+          
 
   embededScript : (req, res)->
     if not Number(req.param('id'))

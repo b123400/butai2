@@ -57,12 +57,15 @@ module.exports = {
         results.users.forEach (u)-> _users[u.id] = u
         photosets.forEach (p)-> p.user = _users[p.user_id]
         
-        res.view 'photoset/index', {
-          photosets
-          sidebarPartial : 'artwork/findSidebar'
-          sidebarContent :
-            {artwork}
-          }
+        if req.wantsJSON
+          res.json artwork
+        else
+          res.view 'photoset/index', {
+            photosets
+            sidebarPartial : 'artwork/findSidebar'
+            sidebarContent :
+              {artwork}
+            }
 
   find : (req, res)->
     Artwork.find().exec (err, artworks)->
@@ -70,10 +73,13 @@ module.exports = {
         Q.ninvoke thisArtwork, "preparePhotosets", 1  # count = 1
 
       Q.all(promises).then ->
-        res.view 'artwork/index', {
-          artworks,
-          extraClass : 'extend-right'
-        }
+        if req.wantsJSON
+          res.json artworks
+        else
+          res.view 'artwork/index', {
+            artworks,
+            extraClass : 'extend-right'
+          }
 
   create : (req, res)->
     Artwork.create
