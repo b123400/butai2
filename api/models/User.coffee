@@ -29,10 +29,11 @@ module.exports = {
       type : 'email'
       required : true
 
-    # toJSON: ->
-    #   obj = this.toObject()
-    #   delete obj.password
-    #   return obj
+    toJSON : ->
+      obj = @toObject()
+      delete obj.password
+      delete obj.email
+      return obj
 
     validPassword: (password, callback)->
       obj = this.toObject()

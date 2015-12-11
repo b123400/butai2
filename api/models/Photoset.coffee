@@ -123,6 +123,11 @@ module.exports = {
         {itemScores} = result
         id = itemScores.map (i)-> Number i.item.replace('p','')
         Photoset.find {id}, cb
+
+    toJSON : ->
+      obj = @toObject()
+      obj.user = @user.toJSON()
+      return obj
   }
 
   findWithinBounds : (maxLat, minLat, maxLng, minLng, cb)->
