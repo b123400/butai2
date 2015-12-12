@@ -127,6 +127,8 @@ module.exports = {
     toJSON : ->
       obj = @toObject()
       obj.user = @user.toJSON()
+      obj.reality = @getImageURL 'reality', 800, 600
+      obj.capture = @getImageURL 'capture', 800, 600
       return obj
   }
 
