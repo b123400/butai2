@@ -14,7 +14,7 @@
         "knox" : "0.8.9",
         "node-uuid":"~1.4.1",
         "request":"~2.34.0",
-        "validator" : "~3.12",
+        "validator" : "~5.7.0",
         "q" : "~1.0",
         "bcrypt" : "~0.8",
         "passport" : "~0.2.0",
