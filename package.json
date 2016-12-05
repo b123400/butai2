@@ -9,7 +9,7 @@
         "grunt": "0.4.1",
         "sails-disk": "~0.10",
         "sails-mysql":"~0.10",
-        "ejs": "0.8.4",
+        "ejs": "2.5.4",
         "optimist": "0.3.4",
         "knox" : "0.8.9",
         "node-uuid":"~1.4.1",
